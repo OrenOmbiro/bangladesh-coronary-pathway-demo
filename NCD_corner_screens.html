@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NCD corner system — screen mock-ups</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#2A2F3A;background:#F4F6F8}
+a{color:#2414BE}a:hover{color:#1B1D45}
+.mono{font-family:'IBM Plex Mono',monospace}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;line-height:20px;white-space:nowrap}
+.chip.amber{background:#FFF1D6;color:#8A4B00}
+.chip.red{background:#FCE8E8;color:#A32D2D}
+.chip.grey{background:#EEF1F4;color:#4A5563}
+.chip.indigo{background:#ECEAFB;color:#2414BE}
+table{border-collapse:collapse;width:100%}
+th{text-align:left;font-size:12px;font-weight:600;color:#5A6472;text-transform:uppercase;letter-spacing:.04em;padding:12px 16px;border-bottom:1px solid #DCE1E7;white-space:nowrap}
+td{padding:16px;border-bottom:1px solid #ECEFF3;font-size:15px;vertical-align:middle;line-height:22px}
+.btn{font:inherit;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;border:1px solid #C9CFD8;background:#fff;color:#1B1D45;cursor:pointer;min-height:44px;white-space:nowrap}
+.nav a{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 12px;border-radius:8px;color:#2A2F3A;text-decoration:none;font-size:14px}
+.nav a.active{background:#ECEAFB;color:#2414BE;font-weight:600}
+input{font:inherit;font-size:14px;padding:9px 12px;border:1px solid #C9CFD8;border-radius:8px;background:#fff;color:#2A2F3A;min-height:44px;box-sizing:border-box}
+
+
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#2A2F3A;background:#F4F6F8}
+a{color:#2414BE}a:hover{color:#1B1D45}
+.mono{font-family:'IBM Plex Mono',monospace}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;line-height:20px;white-space:nowrap}
+.chip.green{background:#E1F4EA;color:#0B6B4A}
+.chip.amber{background:#FFF1D6;color:#8A4B00}
+.chip.red{background:#FCE8E8;color:#A32D2D}
+.chip.blue{background:#E7EDFB;color:#1F4FBF}
+.chip.indigo{background:#ECEAFB;color:#2414BE}
+.btn{font:inherit;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;border:1px solid #C9CFD8;background:#fff;color:#1B1D45;cursor:pointer;min-height:44px;white-space:nowrap}
+.btn.primary{background:#2414BE;border-color:#2414BE;color:#fff}
+.nav a{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 12px;border-radius:8px;color:#2A2F3A;text-decoration:none;font-size:14px}
+.nav a.active{background:#ECEAFB;color:#2414BE;font-weight:600}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:8px}
+.card h2{margin:0;font-size:15px;font-weight:600;color:#1B1D45;padding:14px 20px;border-bottom:1px solid #ECEFF3}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+label,.lbl{font-size:12px;font-weight:600;color:#5A6472}
+input,select{font:inherit;font-size:15px;padding:10px 12px;border:1px solid #C9CFD8;border-radius:8px;background:#fff;color:#2A2F3A;min-height:44px;box-sizing:border-box;width:100%}
+.check{display:flex;align-items:center;gap:10px;font-size:15px;min-height:44px}
+.check input{width:20px;height:20px;min-height:0;margin:0;flex:0 0 20px}
+table{border-collapse:collapse;width:100%}
+th{text-align:left;font-size:12px;font-weight:600;color:#5A6472;text-transform:uppercase;letter-spacing:.04em;padding:10px 20px;border-bottom:1px solid #DCE1E7}
+td{padding:8px 20px;border-bottom:1px solid #ECEFF3;font-size:15px;vertical-align:middle}
+td input{min-height:40px;padding:7px 10px;width:80px}
+.due{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid #ECEFF3}
+.due .t{font-weight:600;color:#1B1D45;font-size:15px}
+.due .m{font-size:13px;color:#5A6472;margin-top:2px}
+
+
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#2A2F3A;background:#F4F6F8}
+a{color:#2414BE}a:hover{color:#1B1D45}
+.mono{font-family:'IBM Plex Mono',monospace}
+.chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:500;line-height:18px;white-space:nowrap}
+.chip.green{background:#E1F4EA;color:#0B6B4A}
+.chip.red{background:#FCE8E8;color:#A32D2D}
+.chip.blue{background:#E7EDFB;color:#1F4FBF}
+.chip.grey{background:#EEF1F4;color:#4A5563}
+.chip.indigo{background:#ECEAFB;color:#2414BE}
+.dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #C9CFD8;flex:0 0 14px;margin-top:4px}
+.dot.green{background:#0B6B4A}.dot.red{background:#A32D2D}.dot.grey{background:#C9CFD8}.dot.blue{background:#1F4FBF}
+.btn{font:inherit;font-size:13px;font-weight:500;padding:10px 14px;border-radius:8px;border:1px solid #C9CFD8;background:#fff;color:#1B1D45;cursor:pointer;min-height:44px;white-space:nowrap}
+.btn.primary{background:#2414BE;border-color:#2414BE;color:#fff}
+.nav a{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 12px;border-radius:8px;color:#2A2F3A;text-decoration:none;font-size:14px}
+.nav a.active{background:#ECEAFB;color:#2414BE;font-weight:600}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:8px}
+.card h2{margin:0;font-size:14px;font-weight:600;color:#1B1D45;padding:12px 16px;border-bottom:1px solid #ECEFF3}
+.row{display:flex;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid #F0F2F5;font-size:14px;line-height:20px}
+.row .k{color:#5A6472}
+
+
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#2A2F3A;background:#F4F6F8}
+a{color:#2414BE}a:hover{color:#1B1D45}
+.mono{font-family:'IBM Plex Mono',monospace}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;line-height:20px;white-space:nowrap}
+.chip.green{background:#E1F4EA;color:#0B6B4A}
+.chip.red{background:#FCE8E8;color:#A32D2D}
+.chip.blue{background:#E7EDFB;color:#1F4FBF}
+.chip.grey{background:#EEF1F4;color:#4A5563}
+.chip.indigo{background:#ECEAFB;color:#2414BE}
+.btn{font:inherit;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;border:1px solid #C9CFD8;background:#fff;color:#1B1D45;cursor:pointer;min-height:44px;white-space:nowrap}
+.btn.primary{background:#2414BE;border-color:#2414BE;color:#fff}
+.nav a{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 12px;border-radius:8px;color:#2A2F3A;text-decoration:none;font-size:14px}
+.nav a.active{background:#ECEAFB;color:#2414BE;font-weight:600}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:8px}
+.card h2{margin:0;font-size:15px;font-weight:600;color:#1B1D45;padding:14px 20px;border-bottom:1px solid #ECEFF3}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+label,.lbl{font-size:12px;font-weight:600;color:#5A6472}
+input,select,textarea{font:inherit;font-size:15px;padding:10px 12px;border:1px solid #C9CFD8;border-radius:8px;background:#fff;color:#2A2F3A;min-height:44px;box-sizing:border-box;width:100%}
+textarea{min-height:84px;resize:vertical;line-height:22px}
+.ro{background:#F8F9FB;border:1px solid #DCE1E7;border-radius:8px;padding:10px 12px;font-size:15px;line-height:22px}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-top:1px solid #ECEFF3}
+.opt .name{font-weight:600;color:#1B1D45;font-size:15px}
+.opt .meta{font-size:13px;color:#5A6472;margin-top:2px}
+
+
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#2A2F3A;background:#F4F6F8}
+a{color:#2414BE}a:hover{color:#1B1D45}
+.mono{font-family:'IBM Plex Mono',monospace}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;line-height:20px;white-space:nowrap}
+.chip.green{background:#E1F4EA;color:#0B6B4A}
+.chip.red{background:#FCE8E8;color:#A32D2D}
+.chip.blue{background:#E7EDFB;color:#1F4FBF}
+.chip.indigo{background:#ECEAFB;color:#2414BE}
+.btn{font:inherit;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;border:1px solid #C9CFD8;background:#fff;color:#1B1D45;cursor:pointer;min-height:44px;white-space:nowrap}
+.btn.primary{background:#2414BE;border-color:#2414BE;color:#fff}
+.nav a{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 12px;border-radius:8px;color:#2A2F3A;text-decoration:none;font-size:14px}
+.nav a.active{background:#ECEAFB;color:#2414BE;font-weight:600}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:8px}
+.card h2{margin:0;font-size:15px;font-weight:600;color:#1B1D45;padding:14px 20px;border-bottom:1px solid #ECEFF3}
+.item{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid #ECEFF3;align-items:flex-start;text-decoration:none;color:inherit}
+.item.sel{background:#F6F5FE;border-left:3px solid #2414BE;padding-left:17px}
+.item .t{font-weight:600;font-size:15px;color:#1B1D45}
+.item .m{font-size:13px;color:#5A6472;margin-top:3px;line-height:19px}
+.kv{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px 16px;font-size:15px;line-height:22px}
+.kv dt{color:#5A6472;margin:0}.kv dd{margin:0}
+table{border-collapse:collapse;width:100%}
+th{text-align:left;font-size:12px;font-weight:600;color:#5A6472;text-transform:uppercase;letter-spacing:.04em;padding:10px 12px;border-bottom:1px solid #DCE1E7}
+td{padding:10px 12px;border-bottom:1px solid #ECEFF3;font-size:15px;vertical-align:top;line-height:22px}
+
+.moment{font-size:13px;color:#5A6472;background:#fff;border:1px solid #DCE1E7;border-radius:999px;padding:4px 12px;align-self:flex-start}
+.nav a .num{display:inline-block;width:22px;height:22px;border-radius:50%;background:#EEF1F4;color:#4A5563;font-size:12px;font-weight:600;line-height:22px;text-align:center;margin-right:10px}
+.nav a.active .num{background:#2414BE;color:#fff}
+.foot{font-size:12px;color:#5A6472;padding:16px 36px;border-top:1px solid #DCE1E7;background:#fff}
+@media (max-width: 760px){.nav{flex:1 1 100% !important;border-right:0 !important;border-bottom:1px solid #DCE1E7;flex-direction:row !important;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; display: flex; flex-direction: column">
+  <header style="background: #1B1D45; color: #fff; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 0 24px; min-height: 56px">
+    <div style="display: flex; align-items: baseline; gap: 14px">
+      <span style="font-weight: 600; font-size: 15px">NCD corner system</span>
+      <span style="font-size: 13px; color: #C9CBE3"><span data-site="uhc">Dhunat Upazila Health Complex</span></span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px; font-size: 13px; color: #C9CBE3">
+      <label style="display: flex; align-items: center; gap: 8px">Pilot site <select id="site-select" style="width: auto; min-height: 32px; padding: 4px 8px; font-size: 13px; border-radius: 6px; border: 1px solid #4A4D8A; background: #2F3270; color: #fff"><option value="bogura">Bogura</option><option value="sylhet">Sylhet</option></select></label>
+      <span>Mock-up · Bangladesh coronary pathway demo</span>
+    </div>
+  </header>
+  <div style="display: flex; flex-wrap: wrap; flex: 1">
+    <nav class="nav" aria-label="Screens" style="flex: 0 0 240px; padding: 16px 12px; border-right: 1px solid #DCE1E7; background: #fff; display: flex; flex-direction: column; gap: 4px">
+      <a href="#due-list" data-slug="due-list"><span><span class="num">1</span>Due-list</span></a><a href="#visit" data-slug="visit"><span><span class="num">2</span>Visit (medical review)</span></a><a href="#patient" data-slug="patient"><span><span class="num">3</span>Patient journey</span></a><a href="#referral" data-slug="referral"><span><span class="num">4</span>Referral and Find-a-service</span></a><a href="#inbox" data-slug="inbox"><span><span class="num">5</span>Inbox</span></a>
+    </nav>
+    <section class="screen" id="s-due-list" data-anchor="2026-07-20" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 24px">
+<div class="moment"><time data-d="2026-07-20" data-fmt="W D M Y">Mon 20 Jul 2026</time> · Nurse S. Khatun</div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+        <div>
+          <h1 style="margin: 0; font-size: 26px; font-weight: 600; color: #1B1D45">Due-list</h1>
+          <p style="margin: 6px 0 0; font-size: 15px; color: #5A6472">One row per patient per overdue step. 14 steps, 11 patients. Raised by the coordination layer — nobody types them.</p>
+        </div>
+        <label style="display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: #5A6472">Find a patient<input type="search" placeholder="Name, health ID or phone" style="width: 280px"></label>
+      </div>
+
+      <div style="background: #fff; border: 1px solid #DCE1E7; border-radius: 8px; overflow-x: auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Step overdue</th>
+              <th>Due</th>
+              <th>Overdue</th>
+              <th>Assigned to</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td><a href="#patient" style="font-weight: 600; text-decoration: none">Shirin Akter</a><div style="font-size: 13px; color: #5A6472">43 F · <span data-site="union">Nimgachi union</span></div></td>
+                <td>Monthly review missed</td>
+                <td class="mono" style="font-size: 14px"><time data-d="2026-05-10" data-fmt="D M">10 May</time></td>
+                <td><span class="chip red">71 days</span></td>
+                <td>Nurse</td>
+                <td style="text-align: right"><button type="button" class="btn">Rebook</button></td>
+              </tr>
+            
+              <tr>
+                <td><a href="#patient" style="font-weight: 600; text-decoration: none">Shirin Akter</a><div style="font-size: 13px; color: #5A6472">43 F · <span data-site="union">Nimgachi union</span></div></td>
+                <td>Annual ECG not done</td>
+                <td class="mono" style="font-size: 14px"><time data-d="2026-06-15" data-fmt="D M">15 Jun</time></td>
+                <td><span class="chip red">35 days</span></td>
+                <td>Medical officer</td>
+                <td style="text-align: right"><button type="button" class="btn">Order ECG</button></td>
+              </tr>
+            
+              <tr>
+                <td><a href="#" style="font-weight: 600; text-decoration: none">Fatema Khatun</a><div style="font-size: 13px; color: #5A6472">49 F · Ward 1</div></td>
+                <td>Refill gap over 14 days</td>
+                <td class="mono" style="font-size: 14px"><time data-d="2026-07-02" data-fmt="D M">2 Jul</time></td>
+                <td><span class="chip amber">18 days</span></td>
+                <td>CHW · R. Sultana</td>
+                <td style="text-align: right"><button type="button" class="btn">Send SMS</button></td>
+              </tr>
+            
+              <tr>
+                <td><a href="#referral" style="font-weight: 600; text-decoration: none">Rahima Begum</a><div style="font-size: 13px; color: #5A6472">55 F · Ward 4</div></td>
+                <td>Eligible for angiography, not referred</td>
+                <td class="mono" style="font-size: 14px"><time data-d="2026-07-17" data-fmt="D M">17 Jul</time></td>
+                <td><span class="chip amber">3 days</span></td>
+                <td>Medical officer</td>
+                <td style="text-align: right"><button type="button" class="btn">Refer</button></td>
+              </tr>
+            
+              <tr>
+                <td><a href="#" style="font-weight: 600; text-decoration: none">Mohammad Hossain</a><div style="font-size: 13px; color: #5A6472">58 M · <span data-site="union">Nimgachi union</span></div></td>
+                <td>Referral not acknowledged by the hub</td>
+                <td class="mono" style="font-size: 14px"><time data-d="2026-07-19" data-fmt="D M">19 Jul</time></td>
+                <td><span class="chip red">1 day</span></td>
+                <td>Hub coordinator</td>
+                <td style="text-align: right"><button type="button" class="btn">View</button></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+
+      <p style="margin: 0; font-size: 13px; color: #5A6472">Not acted on in time → the next person up: nurse → medical officer → upazila health officer. A row names where the step slipped, never who failed.</p>
+    
+</section><section class="screen" id="s-visit" data-anchor="2026-07-22" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 24px">
+<div class="moment"><time data-d="2026-07-22" data-fmt="W D M Y" data-t=", 09:05">Wed 22 Jul 2026, 09:05</time> · Dr M. Rahman, MO</div>
+
+      <div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; color: #1B1D45">Visit — Shirin Akter, 43 F</h1>
+        <p style="margin: 6px 0 0; font-size: 15px; color: #5A6472">Hypertension since <time data-d="2026-02-10" data-fmt="M Y">Feb 2026</time>, step 1 (amlodipine 5 mg). Sent back last night by Sebaghar clinic with an abnormal ECG, breathless on the stairs at work.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+        <div style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+          <section class="card">
+            <h2>Blood pressure since enrolment</h2>
+            <div style="padding: 16px 20px 8px">
+              <div style="display: flex; gap: 20px; font-size: 13px; color: #5A6472; margin-bottom: 6px">
+                <span><span style="display: inline-block; width: 18px; height: 3px; background: #3B2FD6; vertical-align: middle; margin-right: 6px"></span>Systolic</span>
+                <span><span style="display: inline-block; width: 18px; height: 3px; background: #C25622; vertical-align: middle; margin-right: 6px"></span>Diastolic</span>
+                <span><span style="display: inline-block; width: 18px; border-top: 2px dashed #8A94A3; vertical-align: middle; margin-right: 6px"></span>Target ≤140/90</span>
+              </div>
+              <svg viewBox="0 0 560 220" width="100%" role="img" aria-label="Blood pressure readings from February to July 2026 against the target of 140 over 90" style="display: block; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+                <g stroke="#ECEFF3" stroke-width="1">
+                  <line x1="56" y1="35.5" x2="470" y2="35.5"></line>
+                  <line x1="56" y1="97.3" x2="470" y2="97.3"></line>
+                  <line x1="56" y1="128.2" x2="470" y2="128.2"></line>
+                  <line x1="56" y1="159.1" x2="470" y2="159.1"></line>
+                </g>
+                <g fill="#5A6472" font-size="11" text-anchor="end">
+                  <text x="46" y="39">160</text>
+                  <text x="46" y="70">140</text>
+                  <text x="46" y="101">120</text>
+                  <text x="46" y="132">100</text>
+                  <text x="46" y="163">80</text>
+                </g>
+                <line x1="56" y1="66.4" x2="470" y2="66.4" stroke="#8A94A3" stroke-width="1.5" stroke-dasharray="5 4"></line>
+                <line x1="56" y1="143.6" x2="470" y2="143.6" stroke="#8A94A3" stroke-width="1.5" stroke-dasharray="5 4"></line>
+                <line x1="283.4" y1="28" x2="283.4" y2="190" stroke="#C9CFD8" stroke-width="1.5" stroke-dasharray="3 4"></line>
+                <text x="283.4" y="20" fill="#A32D2D" font-size="11" text-anchor="middle">missed</text>
+                <polyline points="56,41.6 127.6,57.1 204.2,63.3" fill="none" stroke="#3B2FD6" stroke-width="2"></polyline>
+                <line x1="204.2" y1="63.3" x2="470" y2="54" stroke="#3B2FD6" stroke-width="2" stroke-dasharray="4 4"></line>
+                <polyline points="56,137.5 127.6,143.6 204.2,146.7" fill="none" stroke="#C25622" stroke-width="2"></polyline>
+                <line x1="204.2" y1="146.7" x2="470" y2="143.6" stroke="#C25622" stroke-width="2" stroke-dasharray="4 4"></line>
+                <g fill="#3B2FD6" stroke="#fff" stroke-width="2">
+                  <circle cx="56" cy="41.6" r="5"></circle><circle cx="127.6" cy="57.1" r="5"></circle><circle cx="204.2" cy="63.3" r="5"></circle><circle cx="470" cy="54" r="6"></circle>
+                </g>
+                <g fill="#C25622" stroke="#fff" stroke-width="2">
+                  <circle cx="56" cy="137.5" r="5"></circle><circle cx="127.6" cy="143.6" r="5"></circle><circle cx="204.2" cy="146.7" r="5"></circle><circle cx="470" cy="143.6" r="6"></circle>
+                </g>
+                <text x="480" y="58" fill="#1B1D45" font-size="12" font-weight="600">148 today</text>
+                <text x="480" y="148" fill="#1B1D45" font-size="12" font-weight="600">90 today</text>
+                <g fill="#5A6472" font-size="11" text-anchor="middle">
+                  <text data-d="2026-02-10" data-fmt="D M" x="56" y="210">10 Feb</text>
+                  <text data-d="2026-03-10" data-fmt="D M" x="127.6" y="210">10 Mar</text>
+                  <text data-d="2026-04-09" data-fmt="D M" x="204.2" y="210">9 Apr</text>
+                  <text data-d="2026-05-10" data-fmt="D M" x="283.4" y="210">10 May</text>
+                  <text data-d="2026-07-22" data-fmt="D M" x="470" y="210">22 Jul</text>
+                </g>
+              </svg>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>To document today</h2>
+            <div style="padding: 20px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 20px">
+              <div class="field"><label for="v-sys">Systolic</label><input id="v-sys" value="148"></div>
+              <div class="field"><label for="v-dia">Diastolic</label><input id="v-dia" value="90"></div>
+              <div class="field"><label for="v-wt">Weight (kg)</label><input id="v-wt" value="58"></div>
+              <div class="field" style="grid-column: 1 / -1">
+                <span class="lbl">Symptoms</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 4px 28px">
+                  <label class="check"><input type="checkbox"> Chest pain</label>
+                  <label class="check"><input type="checkbox" checked> Breathless on exertion</label>
+                  <label class="check"><input type="checkbox"> Breathless at rest</label>
+                </div>
+              </div>
+              <div class="field" style="grid-column: 1 / 3"><label for="v-adh">Adherence</label><select id="v-adh"><option>Missed 1–2 doses a week</option><option>No missed doses</option><option>Missed most doses</option></select></div>
+                            <div class="field"><label for="v-next">Next visit</label><input id="v-next" value="Sun 23 Aug, 08:00" data-d="2026-08-23" data-fmt="W D M" data-pre="" data-post="" data-t=", 08:00"></div>
+            </div>
+          </section>
+          <section class="card">
+            <h2>Prescription</h2>
+            <table>
+              <thead><tr><th>Medicine</th><th>Dose</th><th>Frequency</th><th>Days</th></tr></thead>
+              <tbody>
+                <tr><td>Amlodipine</td><td>5 mg</td><td>once daily</td><td><label for="rx-aml" style="display: none">Days</label><input id="rx-aml" value="30"></td></tr>
+                <tr><td>Aspirin</td><td>75 mg</td><td>once daily</td><td><label for="rx-asp" style="display: none">Days</label><input id="rx-asp" value="30"></td></tr>
+              </tbody>
+            </table>
+            <div style="padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; border-top: 1px solid #ECEFF3">
+              <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 20px"><span class="chip amber">protocol</span><span>Above target at the last two visits. Step 2 is to add losartan 50 mg, after creatinine and potassium.</span></div>
+              <button type="button" class="btn">Add medicine</button>
+            </div>
+          </section>
+        </div>
+
+        <section class="card" style="flex: 1 1 340px; min-width: 0">
+          <h2>Due at this visit</h2>
+          <div class="due">
+            <div><div class="t">Annual ECG — done <time data-d="2026-07-21" data-fmt="D M">21 Jul</time></div><div class="m">Taken at Sebaghar clinic.</div></div>
+            <span class="chip green">done</span>
+          </div>
+          <div class="due">
+            <div><div class="t">Specialist read of that ECG</div><div class="m">Clinic's reading: abnormal (ST/T changes). Sent to <span data-site="dh">Mohammad Ali Hospital, Bogura</span> at 09:10 to confirm.</div></div>
+            <span class="chip blue">awaiting</span>
+          </div>
+          <div class="due">
+            <div><div class="t">Echo within 3 days</div><div class="m">Abnormal ECG · due by <time data-d="2026-07-24" data-fmt="W D M">Fri 24 Jul</time></div></div>
+            <button type="button" class="btn">Book <time data-d="2026-07-23" data-fmt="W D M">Thu 23 Jul</time></button>
+          </div>
+          <div class="due" style="border-bottom: 0">
+            <div><div class="t">Creatinine and potassium</div><div class="m">Needed before losartan</div></div>
+            <button type="button" class="btn">Order</button>
+          </div>
+          <div style="padding: 20px; border-top: 1px solid #ECEFF3; display: flex; flex-direction: column; gap: 12px">
+            <button type="button" class="btn primary">Save visit</button>
+            <div style="font-size: 13px; color: #5A6472; line-height: 20px">Saving sends visit-done and refill-done, and her missed-review row on the due-list closes. The echo and the specialist read stay on the clock.</div>
+          </div>
+        </section>
+      </div>
+    
+</section><section class="screen" id="s-patient" data-anchor="2026-10-07" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 24px">
+<div class="moment"><time data-d="2026-10-07" data-fmt="W D M Y">Wed 7 Oct 2026</time> · Dr M. Rahman, MO</div>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center">
+        <div>
+          <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #1B1D45">Shirin Akter <span style="font-weight: 400; color: #5A6472; font-size: 18px">43 · F</span></h1>
+          <div style="margin-top: 6px; font-size: 14px; color: #5A6472">HID <span class="mono">2203-5571-09</span> · 01700-000384 · <span data-site="address">Nimgachi union, Dhunat</span> · CHW: R. Sultana</div>
+          <div style="margin-top: 8px"><span class="chip indigo">Hypertension since <time data-d="2026-02-10" data-fmt="M Y">Feb 2026</time></span> <span class="chip blue">Coronary pathway · shared care with <span data-site="hubShort">SZMCH Bogura</span></span></div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <a href="#referral" class="btn" style="display: inline-flex; align-items: center; text-decoration: none">New referral</a>
+          <button type="button" class="btn primary">Record visit</button>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <section class="card" style="flex: 999 1 520px; min-width: 0">
+          <h2>Her journey — every step due, done or missed</h2>
+          <div style="padding: 8px 16px 12px; display: flex; flex-direction: column">
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-02-10" data-fmt="D M Y">10 Feb 2026</time></div>
+                <div class="dot green"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Enrolled with hypertension; amlodipine started</div>
+                <div style="flex: 0 0 auto"><span class="chip green">done</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-03-10" data-fmt="M">Mar</time> – <time data-d="2026-04-09" data-fmt="M">Apr</time></div>
+                <div class="dot green"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Two monthly reviews attended</div>
+                <div style="flex: 0 0 auto"><span class="chip green">done</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-05-10" data-fmt="D M">10 May</time></div>
+                <div class="dot red"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Monthly review missed — CHW visited: she cannot come in clinic hours</div>
+                <div style="flex: 0 0 auto"><span class="chip red">missed</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-06-15" data-fmt="D M">15 Jun</time></div>
+                <div class="dot red"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Annual ECG not done — on the due-list, escalated to the MO</div>
+                <div style="flex: 0 0 auto"><span class="chip red">overdue</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-07-21" data-fmt="D M">21 Jul</time></div>
+                <div class="dot blue"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Private clinic ECG abnormal — referred back to the corner with the trace</div>
+                <div style="flex: 0 0 auto"><span class="chip blue">received</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-07-22" data-fmt="D">22</time> – <time data-d="2026-07-23" data-fmt="D M"><time data-d="2026-07-23" data-fmt="D M">23 Jul</time></time></div>
+                <div class="dot green"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">ECG read by <span data-site="dhShort">Mohammad Ali Hospital</span>; echo at the corner: EF 38% — eligible for angiography</div>
+                <div style="flex: 0 0 auto"><span class="chip green">done</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-07-23" data-fmt="D M">23 Jul</time></div>
+                <div class="dot green"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Referred to <span data-site="hubShort">SZMCH Bogura</span> (REF-2240); acknowledged same day, booked <time data-d="2026-08-03" data-fmt="D M">3 Aug</time></div>
+                <div style="flex: 0 0 auto"><span class="chip green">booked</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-08-04" data-fmt="D M">4 Aug</time></div>
+                <div class="dot red"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Did not arrive — a day away is a day unpaid; rebooked for the first slot, <time data-d="2026-08-09" data-fmt="D M">9 Aug</time></div>
+                <div style="flex: 0 0 auto"><span class="chip red">not arrived</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-08-09" data-fmt="D">9</time> – <time data-d="2026-08-11" data-fmt="D M"><time data-d="2026-08-11" data-fmt="D M">11 Aug</time></time></div>
+                <div class="dot green"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Angiography and PCI (one stent); discharged; plan sent and accepted</div>
+                <div style="flex: 0 0 auto"><span class="chip green">done</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-09-09" data-fmt="D M">9 Sep</time></div>
+                <div class="dot green"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Hub review at 1 month, by phone — BP 128/78</div>
+                <div style="flex: 0 0 auto"><span class="chip green">done</span></div>
+              </div>
+            
+              <div style="display: flex; gap: 14px; padding: 9px 0; border-bottom: 1px solid #F0F2F5; align-items: flex-start">
+                <div class="mono" style="flex: 0 0 104px; font-size: 13px; color: #5A6472; padding-top: 2px"><time data-d="2026-11-09" data-fmt="D M">9 Nov</time></div>
+                <div class="dot grey"></div>
+                <div style="flex: 1; min-width: 0; font-size: 14px; line-height: 20px; color: #1B1D45">Hub review at 3 months, in person</div>
+                <div style="flex: 0 0 auto"><span class="chip grey">due</span></div>
+              </div>
+            
+          </div>
+        </section>
+
+        <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+          <section class="card">
+            <h2>Next due</h2>
+            <div class="row"><span>Refill and BP check at the corner</span><span class="mono k"><time data-d="2026-10-09" data-fmt="D M">9 Oct</time></span></div>
+            <div class="row"><span>Hub review, 3 months (<span data-site="town">Bogura</span>, in person)</span><span class="mono k"><time data-d="2026-11-09" data-fmt="D M">9 Nov</time></span></div>
+            <div class="row" style="border-bottom: 0"><span>Clopidogrel stops after 12 months</span><span class="mono k"><time data-d="2027-08-09" data-fmt="D M Y">9 Aug 2027</time></span></div>
+          </section>
+
+          <section class="card">
+            <h2>Medicines — from the hub's plan</h2>
+            <div class="row"><span>Aspirin 75 mg</span><span class="k">daily, lifelong</span></div>
+            <div class="row"><span>Clopidogrel 75 mg</span><span class="k">daily, to <time data-d="2027-08-09" data-fmt="D M Y">9 Aug 2027</time></span></div>
+            <div class="row"><span>Atorvastatin 40 mg</span><span class="k">at night</span></div>
+            <div class="row"><span>Bisoprolol 2.5 mg</span><span class="k">daily</span></div>
+            <div class="row" style="border-bottom: 0"><span>Amlodipine 5 mg</span><span class="k">daily</span></div>
+          </section>
+
+          <section class="card">
+            <h2>Last readings</h2>
+            <div class="row"><span>Blood pressure</span><span class="k">128/78 · target ≤130/80</span></div>
+            <div class="row" style="border-bottom: 0"><span>Ejection fraction</span><span class="k">38% (<time data-d="2026-07-23" data-fmt="M">Jul</time>) · repeat echo <time data-d="2026-11-09" data-fmt="M">Nov</time></span></div>
+          </section>
+        </div>
+      </div>
+    
+</section><section class="screen" id="s-referral" data-anchor="2026-07-23" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 24px">
+<div class="moment"><time data-d="2026-07-23" data-fmt="W D M Y">Thu 23 Jul 2026</time> · Dr M. Rahman, MO</div>
+
+      <div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; color: #1B1D45">Refer Shirin Akter for angiography</h1>
+        <p style="margin: 6px 0 0; font-size: 15px; color: #5A6472">Her record fills in the grey fields. The MO writes the reason, checks the booking limits and picks the hospital.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+        <form class="card" style="flex: 999 1 520px; min-width: 0" aria-label="Referral form">
+          <h2>The referral</h2>
+          <div style="padding: 20px; display: flex; flex-direction: column; gap: 18px">
+            <div class="field">
+              <span class="lbl">Patient</span>
+              <div class="ro">Shirin Akter · 43 · Female · HID <span class="mono">2203-5571-09</span> · 01700-000384 · <span data-site="address">Nimgachi union, Dhunat</span> · not pregnant · no known allergies</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+              <div class="field">
+                <label for="r-service">Service requested</label>
+                <select id="r-service"><option>Angiography</option><option>Cardiology outpatients</option><option>ECG or echo read</option></select>
+              </div>
+              <div class="field">
+                <label for="r-urgency">Urgency</label>
+                <select id="r-urgency"><option>Urgent — within 2 weeks</option><option>Routine</option><option>Emergency</option></select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="r-reason">Reason for referral</label>
+              <textarea id="r-reason" data-shiftdates="1">Breathless on exertion for two weeks. ECG 21 Jul: ST/T changes. Echo 23 Jul: ejection fraction 38% with an anterior wall-motion abnormality. Cardiologist opinion: eligible for angiography.</textarea>
+            </div>
+
+            <div class="field">
+              <span class="lbl">Tests, results and medicines</span>
+              <div class="ro" style="display: flex; flex-direction: column; gap: 4px">
+                <div>Diagnoses: hypertension (since <time data-d="2026-02-10" data-fmt="M Y">Feb 2026</time>) · suspected ischaemic heart disease</div>
+                <div>ECG <time data-d="2026-07-21" data-fmt="D M">21 Jul</time> — ST/T changes, no STEMI · <a href="#ecg">trace attached</a></div>
+                <div>Echo <time data-d="2026-07-23" data-fmt="D M">23 Jul</time> — EF 38%, anterior wall-motion abnormality · <a href="#echo">report attached</a></div>
+                <div>Blood pressure — 142/88 (<time data-d="2026-04-09" data-fmt="M">Apr</time>), 146/90 (<time data-d="2026-03-10" data-fmt="M">Mar</time>), 156/94 (<time data-d="2026-02-10" data-fmt="M">Feb</time>)</div>
+                <div>Medicines — amlodipine 5 mg daily; aspirin 75 mg daily</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="r-days">Booking limits — when she can attend</label>
+              <input id="r-days" value="Fridays, or the first slot of the morning. Works six days, Friday off; about an hour and a half by bus." data-site-tpl="Fridays, or the first slot of the morning. Works six days, Friday off; {travelLower}.">
+            </div>
+
+            <div class="field">
+              <span class="lbl">Consent and referrer</span>
+              <div class="ro">Consent given, including for the receiving clinician to open her record · Dr M. Rahman, Medical Officer · 01700-000120</div>
+            </div>
+          </div>
+        </form>
+
+        <section class="card" style="flex: 1 1 360px; min-width: 0">
+          <h2>Who can do this, and when?</h2>
+          <div class="opt" style="background: #F6F5FE; border-left: 3px solid #2414BE; border-top: 0">
+            <div>
+              <div class="name"><span data-site="hub">Shaheed Ziaur Rahman Medical College Hospital</span></div>
+              <div class="meta">Angiography · next slot <time data-d="2026-08-03" data-fmt="W D M">Mon 3 Aug</time> (in 11 days) · <span data-site="km">35 km</span></div>
+            </div>
+            <span class="chip green">chosen</span>
+          </div>
+          <div class="opt">
+            <div>
+              <div class="name">National Institute of Cardiovascular Diseases, Dhaka</div>
+              <div class="meta">Angiography · next slot <time data-d="2026-08-13" data-fmt="W D M">Thu 13 Aug</time> (in 3 weeks) · <span data-site="kmDhaka">200 km</span></div>
+            </div>
+            <span class="chip grey">not chosen</span>
+          </div>
+          <div class="opt">
+            <div>
+              <div class="name"><span data-site="dh">Mohammad Ali Hospital, Bogura</span></div>
+              <div class="meta">Cardiology outpatients only · no cath lab · <span data-site="km">35 km</span></div>
+            </div>
+            <span class="chip blue">outpatients</span>
+          </div>
+          <div style="padding: 20px; border-top: 1px solid #ECEFF3; display: flex; flex-direction: column; gap: 12px">
+            <button type="button" class="btn primary">Send referral to <span data-site="town">Bogura</span></button>
+            <div style="font-size: 13px; color: #5A6472; line-height: 20px"><span data-site="town">Bogura</span> has 24 hours to acknowledge. The corner is told when she is booked, when she arrives, and if she does not.</div>
+          </div>
+        </section>
+      </div>
+    
+</section><section class="screen" id="s-inbox" data-anchor="2026-08-11" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 24px">
+<div class="moment"><time data-d="2026-08-11" data-fmt="W D M Y">Tue 11 Aug 2026</time> · Dr M. Rahman, MO</div>
+
+      <div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; color: #1B1D45">Inbox</h1>
+        <p style="margin: 6px 0 0; font-size: 15px; color: #5A6472">What comes back to the corner: results, status changes on its referrals, and the hub's plan.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+        <section class="card" style="flex: 1 1 340px; min-width: 0">
+          <h2>Shirin Akter · REF-2240</h2>
+          <a class="item sel" href="#plan">
+            <span class="chip indigo">plan</span>
+            <div style="min-width: 0">
+              <div class="t">Plan from <span data-site="town">Bogura</span></div>
+              <div class="m">Discharged today 10:30 · plan sent 16:10 · waiting for Accept</div>
+            </div>
+          </a>
+          <a class="item" href="#arrived">
+            <span class="chip green">arrived</span>
+            <div style="min-width: 0">
+              <div class="t">Arrived at <span data-site="town">Bogura</span></div>
+              <div class="m"><time data-d="2026-08-09" data-fmt="D M" data-t=" 07:52">9 Aug 07:52</time>, stamped by the registration desk</div>
+            </div>
+          </a>
+          <a class="item" href="#notarrived">
+            <span class="chip red">missed</span>
+            <div style="min-width: 0">
+              <div class="t">Did not arrive</div>
+              <div class="m"><time data-d="2026-08-04" data-fmt="D M">4 Aug</time> · CHW visited · rebooked for <time data-d="2026-08-09" data-fmt="D M">9 Aug</time>, first slot</div>
+            </div>
+          </a>
+          <a class="item" href="#read" style="border-bottom: 0">
+            <span class="chip blue">result</span>
+            <div style="min-width: 0">
+              <div class="t">ECG read by <span data-site="dhShort">Mohammad Ali Hospital</span></div>
+              <div class="m"><time data-d="2026-07-22" data-fmt="D M">22 Jul</time> · ST/T changes, no STEMI · needs echo</div>
+            </div>
+          </a>
+        </section>
+
+        <section class="card" style="flex: 999 1 520px; min-width: 0" id="plan">
+          <h2>The plan — <span data-site="hub">Shaheed Ziaur Rahman Medical College Hospital</span>, <time data-d="2026-08-11" data-fmt="D M Y">11 Aug 2026</time></h2>
+          <div style="padding: 20px; display: flex; flex-direction: column; gap: 20px">
+            <dl class="kv">
+              <dt>What was done</dt><dd>Angiography <time data-d="2026-08-09" data-fmt="D M">9 Aug</time>: single-vessel disease (LAD). PCI with one stent. Ejection fraction 38%.</dd>
+              <dt>Corner does</dt><dd>Monthly refills and a BP check, target ≤130/80. Ask about chest pain each visit. Re-refer for pain or breathlessness at rest.</dd>
+              <dt>Hub does</dt><dd>Reviews at 1 month (phone, <time data-d="2026-09-09" data-fmt="D M">9 Sep</time>), 3 months (in person, <time data-d="2026-11-09" data-fmt="D M">9 Nov</time>), then 6, 9 and 12 months.</dd>
+            </dl>
+
+            <table>
+              <thead><tr><th>Medicine</th><th>Dose</th><th>For how long</th></tr></thead>
+              <tbody>
+                <tr><td>Aspirin</td><td>75 mg daily</td><td>lifelong</td></tr>
+                <tr><td>Clopidogrel</td><td>75 mg daily</td><td>12 months, to <time data-d="2027-08-09" data-fmt="D M Y">9 Aug 2027</time></td></tr>
+                <tr><td>Atorvastatin</td><td>40 mg at night</td><td>lifelong</td></tr>
+                <tr><td>Bisoprolol</td><td>2.5 mg daily</td><td>review at 3 months</td></tr>
+                <tr><td>Amlodipine</td><td>5 mg daily</td><td>continue</td></tr>
+              </tbody>
+            </table>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+              <div style="font-size: 13px; color: #5A6472; line-height: 20px">Accept writes these medicines and review dates into her record and tells the hub.</div>
+              <div style="display: flex; gap: 8px">
+                <button type="button" class="btn">Query</button>
+                <button type="button" class="btn primary">Accept plan</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    
+</section>
+  </div>
+  <div class="foot">Static mock-up: buttons do not act, nothing is saved or sent. Public facilities are real: the two pilot districts (Bogura and Sylhet) and NICVD in Dhaka. The private clinic is invented, and all patients, dates and appointment slots are illustrative. Service levels are proposals for the technical working group.</div>
+</div>
+
+<script>
+(function () {
+  var screens = document.querySelectorAll('.screen'), links = document.querySelectorAll('.nav a[data-slug]');
+  function show() {
+    var slug = location.hash.replace('#', '') || screens[0].id.slice(2);
+    if (!document.getElementById('s-' + slug)) slug = screens[0].id.slice(2);
+    screens.forEach(function (s) { s.style.display = s.id === 's-' + slug ? 'flex' : 'none'; });
+    links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('data-slug') === slug); });
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', show);
+  show();
+
+  // Dates: each screen is a snapshot; its own moment moves to the current week, by whole weeks, so weekdays stay true.
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var DAY = 864e5, now = new Date(), today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  function shiftFor(el) {
+    var sec = el.closest('[data-anchor]'); if (!sec) return 0;
+    var a = sec.getAttribute('data-anchor').split('-'), anchor = Date.UTC(+a[0], +a[1] - 1, +a[2]);
+    return Math.max(0, Math.floor((today - anchor) / (7 * DAY))) * 7 * DAY;
+  }
+  function fmt(el) {
+    var p = el.getAttribute('data-d').split('-'), d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]) + shiftFor(el));
+    var map = { W: WD[d.getUTCDay()], D: d.getUTCDate(), M: MON[d.getUTCMonth()], Y: d.getUTCFullYear() };
+    return el.getAttribute('data-fmt').replace(/[WDMY]/g, function (c) { return map[c]; }) + (el.getAttribute('data-t') || '');
+  }
+  document.querySelectorAll('[data-d]').forEach(function (el) {
+    if (el.tagName === 'INPUT') el.value = (el.getAttribute('data-pre') || '') + fmt(el) + (el.getAttribute('data-post') || '');
+    else el.textContent = fmt(el);
+  });
+  // Pilot site: names and distances switch together; ?site=sylhet in the link preselects it.
+  var SITES = {"bogura": {"name": "Bogura", "hub": "Shaheed Ziaur Rahman Medical College Hospital", "hubShort": "SZMCH Bogura", "town": "Bogura", "dh": "Mohammad Ali Hospital, Bogura", "dhShort": "Mohammad Ali Hospital", "uhc": "Dhunat Upazila Health Complex", "upazila": "Dhunat", "union": "Nimgachi union", "address": "Nimgachi union, Dhunat", "casualty": "Sherpur UHC casualty", "km": "35 km", "kmDhaka": "200 km", "travel": "About an hour and a half by bus", "travelLower": "about an hour and a half by bus"}, "sylhet": {"name": "Sylhet", "hub": "Sylhet MAG Osmani Medical College Hospital", "hubShort": "MAG Osmani, Sylhet", "town": "Sylhet", "dh": "Sylhet Sadar Hospital", "dhShort": "Sylhet Sadar Hospital", "uhc": "Gowainghat Upazila Health Complex", "upazila": "Gowainghat", "union": "Fatehpur union", "address": "Fatehpur union, Gowainghat", "casualty": "Golapganj UHC casualty", "km": "45 km", "kmDhaka": "240 km", "travel": "About two hours by bus", "travelLower": "about two hours by bus"}};
+  var sel = document.getElementById('site-select');
+  var cur = (new URLSearchParams(location.search).get('site') || 'bogura').toLowerCase();
+  if (!SITES[cur]) cur = 'bogura';
+  function applySite() {
+    var S = SITES[cur];
+    document.querySelectorAll('[data-site]').forEach(function (el) { el.textContent = S[el.getAttribute('data-site')] || el.textContent; });
+    document.querySelectorAll('[data-site-tpl]').forEach(function (el) { el.value = el.getAttribute('data-site-tpl').replace(/\{(\w+)\}/g, function (m, k) { return S[k] || m; }); });
+    if (sel) sel.value = cur;
+  }
+  if (sel) sel.addEventListener('change', function () {
+    cur = sel.value; applySite();
+    var u = new URL(location.href); u.searchParams.set('site', cur); history.replaceState(null, '', u);
+  });
+  applySite();
+
+  var RE = /\b(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun) )?(\d{1,2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(?: (2026|2027))?/g;
+  document.querySelectorAll('textarea[data-shiftdates]').forEach(function (ta) {
+    var shift = shiftFor(ta);
+    ta.value = ta.value.replace(RE, function (m, wd, d, mon, yr) {
+      var dt = new Date(Date.UTC(yr ? +yr : 2026, MON.indexOf(mon), +d) + shift);
+      return (wd ? WD[dt.getUTCDay()] + ' ' : '') + dt.getUTCDate() + ' ' + MON[dt.getUTCMonth()] + (yr ? ' ' + dt.getUTCFullYear() : '');
+    });
+  });
+})();
+</script>
+</body>
+</html>

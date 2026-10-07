@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bangladesh coronary pathway demo — screen mock-ups</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#2A2F3A;background:#F4F6F8;line-height:1.5}
+header{background:#1B1D45;color:#fff;padding:20px 24px}
+header h1{margin:0;font-size:20px;font-weight:600}
+header p{margin:6px 0 0;font-size:14px;color:#C9CBE3}
+main{max-width:960px;margin:0 auto;padding:32px 24px 48px}
+.intro{font-size:16px;color:#5A6472;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:14px}
+.card h2{margin:0;font-size:18px;font-weight:600;color:#1B1D45}
+.card .who{font-size:14px;color:#5A6472}
+.card ol{margin:0;padding-left:20px;font-size:15px}
+.card ol li{margin:2px 0}
+.open{display:inline-block;margin-top:auto;padding:12px 18px;border-radius:8px;background:#2414BE;color:#fff;text-decoration:none;font-weight:500;font-size:15px;align-self:flex-start}
+.open:hover{background:#1B1D45}
+.links{font-size:14px;color:#5A6472}
+.links a{color:#2414BE}
+.note{margin:32px 0 0;padding:16px 20px;background:#fff;border:1px solid #DCE1E7;border-radius:10px;font-size:14px;color:#5A6472}
+.note p{margin:0 0 8px}.note p:last-child{margin:0}
+</style>
+</head>
+<body>
+<header>
+  <h1>Bangladesh coronary pathway demo — screen mock-ups</h1>
+  <p>NCD corner at the upazila health complex → cath-lab hub at the medical college, with the coordination layer between them</p>
+</header>
+<main>
+  <p class="intro">Two clickable mock-ups, one for each end of the pathway. They follow one patient, Shirin Akter, from an overdue review at her NCD corner to angiography at the hub and the shared plan afterwards. Every screen is a snapshot of one moment; the menu on the left moves between them.</p>
+
+  <div class="grid">
+    <section class="card">
+      <h2>NCD corner system</h2>
+      <div class="who">Dhunat Upazila Health Complex · nurse and medical officer</div>
+      <ol>
+        <li>Due-list — overdue steps raised by the coordination layer</li>
+        <li>Visit (medical review) — BP trend, what to document, prescription</li>
+        <li>Patient journey — every step due, done or missed</li>
+        <li>Referral and Find-a-service — the referral record and who can take it</li>
+        <li>Inbox — results, status changes and the hub's plan</li>
+      </ol>
+      <div class="links">Straight to a screen: <a href="NCD_corner_screens.html#visit">the visit</a> · <a href="NCD_corner_screens.html#referral">the referral</a> · <a href="NCD_corner_screens.html#inbox">the plan coming back</a></div>
+      <a class="open" href="NCD_corner_screens.html">Open the corner screens</a>
+    </section>
+
+    <section class="card">
+      <h2>Cath-lab hub system</h2>
+      <div class="who">Shaheed Ziaur Rahman Medical College Hospital · coordinator and cardiologist</div>
+      <ol>
+        <li>Referrals — the line list, with acknowledgement and arrival status</li>
+        <li>Discharge and plan — the back-referral the corner receives</li>
+        <li>Hub review — the one-month review, with the corner's record alongside</li>
+        <li>Our services — the service register that answers Find-a-service</li>
+      </ol>
+      <div class="links">Straight to a screen: <a href="Cath-lab_hub_screens.html#discharge">the discharge plan</a> · <a href="Cath-lab_hub_screens.html#review">the hub review</a> · <a href="Cath-lab_hub_screens.html#services">the service register</a></div>
+      <a class="open" href="Cath-lab_hub_screens.html">Open the hub screens</a>
+    </section>
+  </div>
+
+  <div class="note">
+    <p><strong>Pilot site.</strong> Both files open on Bogura. The selector in the header switches every name and distance to Sylhet (Sylhet MAG Osmani Medical College Hospital, Sylhet Sadar Hospital, Gowainghat Upazila Health Complex). A link can preselect it: <a href="NCD_corner_screens.html?site=sylhet">corner, Sylhet</a> · <a href="Cath-lab_hub_screens.html?site=sylhet">hub, Sylhet</a>.</p>
+    <p><strong>Dates.</strong> Each screen re-dates itself to the current week when opened, so the demo never looks stale.</p>
+    <p><strong>What is real.</strong> Static mock-ups: buttons do not act, nothing is saved or sent. Public facilities are real (the two pilot districts and NICVD in Dhaka); the private clinic is invented, and all patients, dates and appointment slots are illustrative. Service levels are proposals for the technical working group.</p>
+  </div>
+</main>
+</body>
+</html>
