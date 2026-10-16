@@ -32,7 +32,7 @@ main{max-width:960px;margin:0 auto;padding:32px 24px 48px}
   <p>NCD corner at the upazila health complex → cath-lab hub at the medical college, with the coordination layer between them</p>
 </header>
 <main>
-  <p class="intro">Two clickable mock-ups, one for each end of the pathway. They follow one patient, Shirin Akter, from an overdue review at her NCD corner to angiography at the hub and the shared plan afterwards. Every screen is a snapshot of one moment; the menu on the left moves between them.</p>
+  <p class="intro">Three clickable prototypes. The first two are mock-ups of each end of the pathway: they follow one patient, Shirin Akter, from an overdue review at her NCD corner to angiography at the hub and the shared plan afterwards, and every screen is a snapshot of one moment. The third is the UHC record itself, with the recommendations appearing as the clinician enters the complaint, orders and results.</p>
 
   <div class="grid">
     <section class="card">
@@ -61,12 +61,25 @@ main{max-width:960px;margin:0 auto;padding:32px 24px 48px}
       <div class="links">Straight to a screen: <a href="Cath-lab_hub_screens.html#discharge">the discharge plan</a> · <a href="Cath-lab_hub_screens.html#review">the hub review</a> · <a href="Cath-lab_hub_screens.html#services">the service register</a></div>
       <a class="open" href="Cath-lab_hub_screens.html">Open the hub screens</a>
     </section>
+
+    <section class="card">
+      <h2>UHC record with recommendations</h2>
+      <div class="who">Gabtoli Upazila Health Complex · medical officer</div>
+      <ol>
+        <li>Reminders — an ECG due, a missed post-stent review, a hub review to book; Yes orders or books it</li>
+        <li>Abdul Karim, emergency room — chest pain starts the ECG clock; the ECG image with an AI read, sent to the hub cardiologist; the STEMI pathway with the cath-lab centres and an auto-filled referral</li>
+        <li>Rokeya Begum, outpatients — upper abdominal pain prompts an ECG; troponin now and at 3 hours; the NSTEMI referral</li>
+        <li>Shirin Akter, NCD corner — the ECG from the reminder, then echo, medicines first and the criteria for angiography</li>
+      </ol>
+      <div class="links">Straight to a patient: <a href="UHC_decision_support.html#patient/karim">Abdul Karim</a> · <a href="UHC_decision_support.html#patient/rokeya">Rokeya Begum</a> · <a href="UHC_decision_support.html#patient/shirin">Shirin Akter</a> · <a href="UHC_decision_support.html#reminders">the reminders</a></div>
+      <a class="open" href="UHC_decision_support.html">Open the UHC record</a>
+    </section>
   </div>
 
   <div class="note">
     <p><strong>Pilot site.</strong> Both files open on Bogura. The selector in the header switches every name and distance to Sylhet (Sylhet MAG Osmani Medical College Hospital, Sylhet Sadar Hospital, Gowainghat Upazila Health Complex). A link can preselect it: <a href="NCD_corner_screens.html?site=sylhet">corner, Sylhet</a> · <a href="Cath-lab_hub_screens.html?site=sylhet">hub, Sylhet</a>.</p>
     <p><strong>Dates.</strong> Each screen re-dates itself to the current week when opened, so the demo never looks stale.</p>
-    <p><strong>What is real.</strong> Static mock-ups: buttons do not act, nothing is saved or sent. Public facilities are real (the two pilot districts and NICVD in Dhaka); the private clinic is invented, and all patients, dates and appointment slots are illustrative. Service levels are proposals for the technical working group.</p>
+    <p><strong>What is real.</strong> The corner and hub screens are static mock-ups: buttons do not act. In the UHC record the recommendations respond, but nothing is saved or sent, and the AI reads, the cardiologist's replies and the hub's acknowledgements are simulated. Public facilities are real (the two pilot districts and NICVD in Dhaka); the private clinic is invented, and all patients, staff names, dates and appointment slots are illustrative. The ECGs are synthetic traces drawn to scale. Clinical time standards follow the 2023 ESC guidelines; the age and risk filters, the criteria for angiography and the service levels are proposals for the technical working group and the district KOLs.</p>
   </div>
 </main>
 </body>

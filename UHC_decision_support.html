@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UHC clinical system — decision support in the EMR</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#2A2F3A;background:#F4F6F8}
+a{color:#2414BE}a:hover{color:#1B1D45}
+.mono{font-family:'IBM Plex Mono',monospace}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;line-height:20px;white-space:nowrap}
+.chip.green{background:#E1F4EA;color:#0B6B4A}
+.chip.amber{background:#FFF1D6;color:#8A4B00}
+.chip.red{background:#FCE8E8;color:#A32D2D}
+.chip.grey{background:#EEF1F4;color:#4A5563}
+.chip.indigo{background:#ECEAFB;color:#2414BE}
+.chip.ai{background:#1B1D45;color:#fff;letter-spacing:.04em}
+.btn{font:inherit;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;border:1px solid #C9CFD8;background:#fff;color:#1B1D45;cursor:pointer;min-height:44px;box-sizing:border-box;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;text-align:center;gap:8px}
+.btn:hover{border-color:#8E97A6;color:#1B1D45}
+.btn.primary{background:#2414BE;border-color:#2414BE;color:#fff}
+.btn.primary:hover{background:#1B1D45;border-color:#1B1D45;color:#fff}
+.btn.small{min-height:36px;padding:6px 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.nav a{display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 12px;border-radius:8px;color:#2A2F3A;text-decoration:none;font-size:14px;gap:8px}
+.nav a:hover{background:#F4F6F8;color:#1B1D45}
+.nav a.active{background:#ECEAFB;color:#2414BE;font-weight:600}
+.nav .sec{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5A6472;padding:14px 12px 4px}
+.moment{font-size:13px;color:#5A6472;background:#fff;border:1px solid #DCE1E7;border-radius:999px;padding:4px 12px;align-self:flex-start}
+.foot{font-size:12px;line-height:18px;color:#5A6472;padding:16px 36px;border-top:1px solid #DCE1E7;background:#fff}
+.card{background:#fff;border:1px solid #DCE1E7;border-radius:8px}
+.sh{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid #ECEFF3;flex-wrap:wrap}
+.sh h2{margin:0;font-size:15px;font-weight:600;color:#1B1D45}
+.sh .sub{font-size:13px;color:#5A6472}
+.pad{padding:20px;display:flex;flex-direction:column;gap:16px}
+.cols{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.col-main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.col-side{flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:16px}
+table{border-collapse:collapse;width:100%}
+th{text-align:left;font-size:12px;font-weight:600;color:#5A6472;text-transform:uppercase;letter-spacing:.04em;padding:10px 16px;border-bottom:1px solid #DCE1E7;white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid #ECEFF3;font-size:14px;vertical-align:middle;line-height:21px}
+tr:last-child td{border-bottom:0}
+td .sub{font-size:13px;color:#5A6472}
+.cds{border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.cds.stop{background:#FCE8E8;border:1px solid #E3A1A1}
+.cds.inline{background:#FFF4DE;border:1px solid #E8C27A}
+.cds.due{background:#ECEAFB;border:1px solid #C5BEF3}
+.cds.ok{background:#E1F4EA;border:1px solid #A6D8BC}
+.cds.muted{background:#F4F6F8;border:1px solid #DCE1E7}
+.cds .k{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.kind{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#5A6472}
+.pt{margin:0;font-size:16px;line-height:23px;font-weight:600;color:#1B1D45}
+.cds.stop .pt{color:#8E1F1F}
+.cds.inline .pt{color:#6E3D00}
+.cds.due .pt{color:#2414BE}
+.cds.ok .pt{color:#0B6B4A}
+.pb{margin:0;font-size:14px;line-height:21px;color:#2A2F3A}
+.pb.small{font-size:13px;line-height:19px;color:#4A5563}
+.facts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:13px;line-height:19px;color:#4A5563}
+.facts li{display:flex;gap:8px}
+.facts li::before{content:"·";color:#8E97A6}
+.actrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.lbl{font-size:12px;font-weight:600;color:#5A6472}
+input,select,textarea{font:inherit;font-size:14px;padding:9px 12px;border:1px solid #C9CFD8;border-radius:8px;background:#fff;color:#2A2F3A;min-height:44px;box-sizing:border-box;width:100%}
+textarea{min-height:120px;line-height:21px;resize:vertical}
+.ro{background:#F8F9FB;border:1px solid #DCE1E7;border-radius:8px;padding:10px 12px;font-size:14px;line-height:21px;min-height:44px;box-sizing:border-box}
+.row2{display:flex;flex-wrap:wrap;gap:16px}
+.row2>.field{flex:1 1 220px}
+.check{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:20px;cursor:pointer}
+.check input{width:18px;height:18px;min-height:0;margin:1px 0 0;flex:0 0 auto;accent-color:#2414BE}
+.toggle{font:inherit;font-size:13px;font-weight:500;min-height:36px;min-width:56px;padding:6px 14px;border:1px solid #C9CFD8;background:#fff;color:#2A2F3A;cursor:pointer;box-sizing:border-box}
+.toggle.on{background:#1B1D45;border-color:#1B1D45;color:#fff}
+.seg{display:inline-flex}
+.seg .toggle:first-child{border-radius:8px 0 0 8px}
+.seg .toggle:last-child{border-radius:0 8px 8px 0;margin-left:-1px}
+.crit{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:14px;line-height:20px}
+.crit:last-child{border-bottom:0}
+.vit{display:flex;flex-wrap:wrap;gap:12px}
+.vit div{flex:1 1 120px;background:#F8F9FB;border:1px solid #DCE1E7;border-radius:8px;padding:10px 12px}
+.vit .v{font-size:18px;font-weight:600;color:#1B1D45}
+.vit .l{font-size:12px;color:#5A6472}
+.banner{padding:16px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
+.banner .nm{font-size:20px;font-weight:600;color:#1B1D45}
+.banner .meta{font-size:14px;color:#4A5563;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.kv{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 12px;font-size:13px;line-height:19px;margin:0}
+.kv dt{color:#5A6472;margin:0}
+.kv dd{margin:0}
+.log{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:19px}
+.log li{display:flex;gap:10px}
+.log .t{font-family:'IBM Plex Mono',monospace;color:#5A6472;flex:0 0 44px}
+.ecg{border:1px solid #F0C9C9;border-radius:8px;overflow:hidden;background:#FFF8F8}
+.cap{font-size:12px;color:#5A6472}
+.medrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px 0;border-bottom:1px solid #ECEFF3;font-size:14px}
+.medrow:last-child{border-bottom:0}
+.medrow .n{flex:1 1 200px;min-width:0;font-weight:600;color:#1B1D45}
+.medrow .d{flex:1 1 160px;min-width:0;color:#4A5563;font-size:13px}
+.centres{display:flex;flex-direction:column;gap:8px}
+.centre{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;padding:12px 14px;border:1px solid #DCE1E7;border-radius:8px;background:#fff}
+.centre.on{border-color:#2414BE;box-shadow:inset 3px 0 0 #2414BE}
+.centre .cn{font-weight:600;color:#1B1D45;font-size:14px;line-height:21px}
+.centre .cm{font-size:13px;line-height:19px;color:#4A5563;margin-top:2px}
+.centre .toggle[aria-pressed="true"]{background:#1B1D45;border-color:#1B1D45;color:#fff}
+.rem{padding:16px 20px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #ECEFF3}
+.rem:last-child{border-bottom:0}
+.rem .t{font-weight:600;color:#1B1D45;font-size:15px}
+.bell{position:relative;background:#2F3270;border:1px solid #4A4D8A;color:#fff;border-radius:8px;min-height:36px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.badge{background:#E0483E;color:#fff;border-radius:999px;font-size:11px;font-weight:600;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 5px}
+.toasts{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:50;max-width:380px;width:calc(100% - 40px)}
+.toast{background:#1B1D45;color:#fff;border-radius:10px;padding:12px 14px;font-size:14px;line-height:20px;box-shadow:0 8px 24px rgba(27,29,69,.25);display:flex;gap:12px;align-items:flex-start}
+.toast .x{background:none;border:0;color:#C9CBE3;font:inherit;font-size:18px;line-height:20px;cursor:pointer;padding:0;margin-left:auto;min-width:28px;min-height:28px}
+.toast .tt{font-weight:600}
+.overlay{position:fixed;inset:0;background:rgba(27,29,69,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:16px;box-sizing:border-box}
+.overlay.open{display:flex}
+.dialog{background:#fff;border-radius:12px;max-width:560px;width:100%;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 16px 40px rgba(27,29,69,.3)}
+.dialog h2{margin:0;font-size:18px;color:#8E1F1F}
+.small{font-size:13px;color:#5A6472}
+.hintline{font-size:13px;line-height:19px;color:#4A5563;margin:0}
+.status{font-size:13px;color:#4A5563}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; display: flex; flex-direction: column">
+  <header style="background: #1B1D45; color: #fff; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 24px; min-height: 56px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px">
+      <span style="font-weight: 600; font-size: 15px">UHC clinical system</span>
+      <span style="font-size: 13px; color: #C9CBE3"><span data-site="uhc">Gabtoli Upazila Health Complex</span></span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 13px; color: #C9CBE3">
+      <label style="display: flex; align-items: center; gap: 8px">Pilot site <select id="site-select" style="width: auto; min-height: 32px; padding: 4px 8px; font-size: 13px; border-radius: 6px; border: 1px solid #4A4D8A; background: #2F3270; color: #fff"><option value="bogura">Bogura</option><option value="sylhet">Sylhet</option></select></label>
+      <span id="clock" class="mono" style="background: #2F3270; border-radius: 999px; padding: 4px 10px; color: #fff"></span>
+      <a class="bell" href="#reminders" id="bell" aria-label="Reminders"><span>Reminders</span><span class="badge" id="bell-badge">3</span></a>
+      <span>Dr M. Rahman, MO</span>
+    </div>
+  </header>
+  <div style="display: flex; flex-wrap: wrap; flex: 1">
+    <nav class="nav" aria-label="Modules" style="flex: 0 0 240px; padding: 16px 12px; border-right: 1px solid #DCE1E7; background: #fff; display: flex; flex-direction: column; gap: 4px">
+      <a href="#worklist" data-slug="worklist"><span>Today’s patients</span><span class="chip grey">3</span></a>
+      <a href="#reminders" data-slug="reminders"><span>Reminders</span><span class="chip red" id="nav-badge">3</span></a>
+      <a href="#referrals" data-slug="referrals"><span>Referrals sent</span><span class="chip grey" id="ref-count">0</span></a>
+      <div class="sec">Open today</div>
+      <div id="nav-patients" style="display: flex; flex-direction: column; gap: 4px"></div>
+    </nav>
+
+    <section class="screen" id="s-worklist" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 20px">
+      <div class="moment"><span id="today-1"></span> · Today’s patients</div>
+      <div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; color: #1B1D45">Today’s patients</h1>
+      </div>
+      <div class="card" style="overflow-x: auto" id="v-worklist"></div>
+    </section>
+
+    <section class="screen" id="s-reminders" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 20px">
+      <div class="moment"><span id="today-2"></span> · Reminders</div>
+      <div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; color: #1B1D45">Reminders</h1>
+        <p style="margin: 6px 0 0; font-size: 15px; color: #5A6472">Raised by the record against the protocol and the booked dates.</p>
+      </div>
+      <div class="card" id="v-reminders"></div>
+    </section>
+
+    <section class="screen" id="s-referrals" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 20px">
+      <div class="moment"><span id="today-3"></span> · Referrals</div>
+      <div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; color: #1B1D45">Referrals sent today</h1>
+        <p style="margin: 6px 0 0; font-size: 15px; color: #5A6472">Each referral carries the clock on the hub: 15 minutes to acknowledge an emergency, 24 hours for a planned referral.</p>
+      </div>
+      <div id="v-referrals" style="display: flex; flex-direction: column; gap: 16px"></div>
+    </section>
+
+    <section class="screen" id="s-patient" style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 40px; display: none; flex-direction: column; gap: 20px">
+      <div id="v-patient" style="display: flex; flex-direction: column; gap: 20px"></div>
+    </section>
+  </div>
+  <div class="foot">Clickable prototype of decision support inside the UHC record: nothing is saved or sent. The AI reads, the cardiologist’s replies and the hub’s acknowledgements are simulated and arrive a few seconds after you act. Public facilities are real (the two pilot districts); the patients, staff names, dates and times are illustrative; the ECGs are synthetic traces drawn to scale, not recordings from patients. Clinical time standards follow the 2023 ESC guidelines for acute coronary syndromes; the age and risk filters, the criteria for angiography and the service levels are proposals for the technical working group and the district KOLs. Ambulance times are estimates from road routing. Troponin assumes the UHC has a bedside test.</div>
+</div>
+<datalist id="cc-list">
+  <option value="Chest pain"></option>
+  <option value="Upper abdominal pain"></option>
+  <option value="Breathlessness on exertion"></option>
+  <option value="Routine NCD review"></option>
+  <option value="Tooth pain"></option>
+  <option value="Fever"></option>
+  <option value="Cough"></option>
+  <option value="Headache"></option>
+</datalist>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(function () {
+  // ---------- Time and dates ----------
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var DAY = 864e5, real = new Date(), today = Date.UTC(real.getFullYear(), real.getMonth(), real.getDate());
+  var ANCHOR = Date.UTC(2026, 9, 16);
+  var SHIFT = Math.max(0, Math.floor((today - ANCHOR) / (7 * DAY))) * 7 * DAY;
+  function D(iso, pat) {
+    var p = iso.split('-'), d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]) + SHIFT);
+    var map = { W: WD[d.getUTCDay()], D: d.getUTCDate(), M: MON[d.getUTCMonth()], Y: d.getUTCFullYear() };
+    return pat.replace(/[WDMY]/g, function (c) { return map[c]; });
+  }
+  function T(m) { var h = Math.floor(m / 60) % 24, mm = m % 60; return (h < 10 ? '0' : '') + h + ':' + (mm < 10 ? '0' : '') + mm; }
+  var TODAY = D('2026-10-16', 'W D M Y');
+  ['today-1', 'today-2', 'today-3'].forEach(function (id) { document.getElementById(id).textContent = TODAY; });
+
+  // ---------- Pilot site ----------
+  // Ambulance times: road routing with no traffic (Gabtoli 14 km, 16 min; Gowainghat 46 km, 44 min), allowed about 1.8 times for an ambulance.
+  var SITES = {
+    bogura: { name: 'Bogura', hub: 'Shaheed Ziaur Rahman Medical College Hospital', hubShort: 'SZMCH', uhc: 'Gabtoli Upazila Health Complex', km: '14 km', amb: 30, kmDhaka: 'about 200 km', ambDhaka: 300, slot: '2026-10-27', cardio: 'Dr S. Ahmed', coord: 'N. Chowdhury' },
+    sylhet: { name: 'Sylhet', hub: 'Sylhet MAG Osmani Medical College Hospital', hubShort: 'MAG Osmani', uhc: 'Gowainghat Upazila Health Complex', km: '46 km', amb: 80, kmDhaka: 'about 240 km', ambDhaka: 360, slot: '2026-10-28', cardio: 'Dr T. Chowdhury', coord: 'R. Ahmed' }
+  };
+  // Cardiac centres with a cath lab, as the service register would list them for this UHC.
+  function centres() {
+    var s = S();
+    return [
+      { key: 'hub', name: s.hub, km: s.km, amb: s.amb, lab: 'Cath lab available now, team on call', slot: s.slot },
+      { key: 'nicvd', name: 'National Institute of Cardiovascular Diseases, Dhaka', km: s.kmDhaka, amb: s.ambDhaka, lab: 'Cath lab available', slot: '2026-11-06' }
+    ];
+  }
+  function ambText(m) { return m < 120 ? 'about ' + m + ' minutes' : 'about ' + Math.round(m / 60) + ' hours'; }
+  // mode: 'emergency' (STEMI, 120-minute limit), 'urgent' (angiography within 24 hours), 'planned' (next slot)
+  function pickCentre(e, mode) {
+    var opts = centres().map(function (c) {
+      var o = { key: c.key, name: c.name, km: c.km, amb: c.amb, lab: c.lab, slot: c.slot, exp: 20 + c.amb + 30 };
+      if (mode === 'emergency') { o.fit = o.exp <= 120; o.fitText = o.fit ? 'Within 120 minutes' : 'Beyond 120 minutes'; o.meta = c.km + ' · ' + ambText(c.amb) + ' by ambulance · ' + c.lab.toLowerCase() + ' · artery opened about ' + o.exp + ' minutes after the ECG'; }
+      else if (mode === 'urgent') { o.fit = c.amb <= 240; o.fitText = o.fit ? 'Within 24 hours' : 'Far'; o.meta = c.km + ' · ' + ambText(c.amb) + ' by ambulance · ' + c.lab.toLowerCase() + ' · CCU bed requested with the referral'; }
+      else { o.fit = true; var days = Math.round((Date.UTC(+c.slot.slice(0, 4), +c.slot.slice(5, 7) - 1, +c.slot.slice(8, 10)) - ANCHOR) / DAY); o.fitText = 'Next slot in ' + days + ' days'; o.days = days; o.meta = c.km + ' · next angiography slot ' + D(c.slot, 'W D M') + ' · ' + c.lab.toLowerCase(); }
+      return o;
+    });
+    var rec = opts.filter(function (o) { return o.fit; })[0] || opts[0];
+    if (mode === 'planned') rec = opts.slice().sort(function (a, b) { return a.days - b.days; })[0];
+    var chosen = opts.filter(function (o) { return o.key === e.centre; })[0] || rec;
+    return { opts: opts, rec: rec, chosen: chosen };
+  }
+  function centreListHtml(e, mode, pick) {
+    return '<div class="field"><span class="lbl">Cardiac centres with a cath lab · service register, updated 08:30 today</span><div class="centres">' + pick.opts.map(function (o) {
+      var on = o.key === pick.chosen.key;
+      return '<div class="centre' + (on ? ' on' : '') + '"><div style="flex: 1 1 320px; min-width: 0"><div class="cn">' + o.name + (o.key === pick.rec.key ? ' ' + chip('indigo', 'Recommended') : '') + '</div><div class="cm">' + o.meta + '</div></div>' +
+        '<div class="actrow">' + chip(o.fit ? 'green' : 'amber', o.fitText) + '<button type="button" class="toggle" aria-pressed="' + on + '" data-act="' + e.pid + ':centre:' + o.key + '" style="border-radius: 8px">' + (on ? 'Chosen' : 'Choose') + '</button></div></div>';
+    }).join('') + '</div></div>';
+  }
+  var sel = document.getElementById('site-select');
+  var cur = (new URLSearchParams(location.search).get('site') || 'bogura').toLowerCase();
+  if (!SITES[cur]) cur = 'bogura';
+  function S() { return SITES[cur]; }
+  function applySite() {
+    document.querySelectorAll('[data-site]').forEach(function (el) { el.textContent = S()[el.getAttribute('data-site')] || el.textContent; });
+    if (sel) sel.value = cur;
+  }
+
+  // ---------- Patients ----------
+  var P = {
+    karim: { name: 'Abdul Karim', age: 58, sex: 'Male', who: 'man', hid: '2207-1184-32', where: 'Emergency room', arrived: 585, conds: [], meds: [], allergies: 'None known',
+      vitals: { bp: '172/104', sys: 172, pulse: 92, spo2: 96, temp: '36.8 °C', rr: 20 }, nurseAt: 587,
+      triage: 'Brought by his son. Sweating, holding his chest. Says the pain started early this morning.', onset: '4', pattern: 'ste', acuity: 'acute',
+      ai: 'ST elevation in V1–V4, greatest in V2–V3, with reciprocal ST depression in III and aVF. Suggestive of acute anterior STEMI. Sinus rhythm, 92/min. Normal PR and QRS; no conduction block.',
+      cardio: 'Agree: acute anterior STEMI. Refer urgently.',
+      lastVisit: 'None on record' },
+    shirin: { name: 'Shirin Akter', age: 43, sex: 'Female', who: 'woman', hid: '2203-5571-09', where: 'NCD corner', arrived: 600, conds: ['Hypertension, since Feb 2026'], meds: ['Amlodipine 5 mg once daily'], allergies: 'None known',
+      vitals: { bp: '142/88', sys: 142, pulse: 84, spo2: 98, temp: '36.6 °C', rr: 16 }, nurseAt: 603,
+      triage: 'Routine hypertension review. Still breathless walking uphill (first noted at her review on ' + D('2026-09-21', 'D M') + ').', onset: 'weeks', pattern: 'nonspecific', acuity: 'chronic',
+      ai: 'No ST elevation. Flattened T waves in V4–V6 with ST depression under 0.5 mm, non-specific. No acute pattern. Sinus rhythm, 84/min. Normal PR and QRS.',
+      cardio: 'Agree: non-specific ST/T changes, no acute pattern. Echo if not done; refer if criteria are met.',
+      lastVisit: D('2026-09-21', 'D M Y') + ': BP 146/90; breathless on exertion noted; ECG not done' },
+    rokeya: { name: 'Rokeya Begum', age: 52, sex: 'Female', who: 'woman', hid: '2201-4410-76', where: 'Outpatients', arrived: 665, conds: ['Type 2 diabetes, since 2023', 'Hypertension, since 2021'], meds: ['Metformin 500 mg twice daily', 'Amlodipine 5 mg once daily'], allergies: 'None known',
+      vitals: { bp: '156/94', sys: 156, pulse: 98, spo2: 97, temp: '36.9 °C', rr: 18 }, nurseAt: 668,
+      triage: 'Burning pain in the upper abdomen since last night. Took antacid tablets at home. Sweaty.', onset: '14', pattern: 'nste', acuity: 'acute',
+      ai: 'No ST elevation. ST depression of 1.5–2 mm with T-wave inversion in V4–V6. Possible NSTE-ACS; needs troponin and clinical correlation. Sinus rhythm, 98/min. Normal PR and QRS.',
+      cardio: 'Agree: no STEMI. ST depression V4–V6 with symptoms: troponin now, repeat at 3 hours; refer if raised.',
+      lastVisit: D('2026-08-30', 'D M Y') + ': diabetes review; HbA1c 8.1%' }
+  };
+  var ORDER = ['karim', 'shirin', 'rokeya'];
+  var ONSETS = [['1', 'About 1 hour ago'], ['4', 'About 4 hours ago, around 06:00'], ['14', 'Last night, about 14 hours ago'], ['days', 'Several days, on and off'], ['weeks', 'Weeks, on and off']];
+  function onsetText(v) { for (var i = 0; i < ONSETS.length; i++) if (ONSETS[i][0] === v) return ONSETS[i][1].toLowerCase(); return v; }
+  var ONSET_PHRASE = { '1': 'about 1 hour ago', '4': 'about 4 hours ago (around 06:00)', '14': 'last night, about 14 hours ago', days: 'several days ago, on and off since', weeks: 'weeks ago, on and off since' };
+  function onsetPhrase(v) { return ONSET_PHRASE[v] || v; }
+
+  // ---------- State ----------
+  var enc = {}, rem = { shirinEcg: 'open', jahanaraMissed: 'open', jahangirReview: 'open' };
+  function init(pid) {
+    var p = P[pid];
+    return { pid: pid, now: p.arrived + 2, opened: false, complaint: '', onset: p.onset, cp: null, orders: [], seq: 0, ecg: null, trop: {}, echo: {}, vh: {}, lowEffort: '', restPain: '', given: {}, lysisAt: null, lysisCI: {}, rec: {}, diagnosis: '', referral: null, rx: p.meds.slice(), rxNew: [], stopped: [], log: [] };
+  }
+  ORDER.forEach(function (pid) { enc[pid] = init(pid); });
+  var referralsSent = [];
+
+  function log(e, text, at) { e.log.push({ t: at == null ? e.now : at, text: text }); }
+  function tick(e, m) { e.now += m; }
+  function later(ms, fn) { setTimeout(fn, ms); }
+
+  // ---------- Builders ----------
+  function chip(cls, t) { return '<span class="chip ' + cls + '">' + t + '</span>'; }
+  function btn(act, label, primary, disabled, small) {
+    return '<button type="button" class="btn' + (primary ? ' primary' : '') + (small ? ' small' : '') + '" data-act="' + act + '"' + (disabled ? ' disabled' : '') + '>' + label + '</button>';
+  }
+  function cds(cls, kind, title, body, extra) {
+    return '<div class="cds ' + cls + '"><div class="k"><span class="kind">Recommendation · ' + kind + '</span></div><p class="pt">' + title + '</p>' + (body ? '<p class="pb">' + body + '</p>' : '') + (extra || '') + '</div>';
+  }
+  // Same box with a plain label: a reply from the hub, a result pending, a dismissed prompt.
+  function note(cls, kind, title, body, extra) {
+    return '<div class="cds ' + cls + '"><div class="k"><span class="kind">' + kind + '</span></div><p class="pt">' + title + '</p>' + (body ? '<p class="pb">' + body + '</p>' : '') + (extra || '') + '</div>';
+  }
+  var reply = note;
+  function check(act, label, on, tag) { return '<label class="check"><input type="checkbox" data-act="' + act + '"' + (on ? ' checked' : '') + '><span>' + label + (tag ? ' ' + tag : '') + '</span></label>'; }
+  function select(id, act, label, opts, val) {
+    return '<div class="field"><label class="lbl" for="' + id + '">' + label + '</label><select id="' + id + '" data-act="' + act + '">' +
+      opts.map(function (o) { return '<option value="' + o[0] + '"' + (String(o[0]) === String(val) ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>';
+  }
+  function card(title, right, body, sub) { return '<section class="card"><div class="sh"><div><h2>' + title + '</h2>' + (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>' + (right || '') + '</div>' + body + '</section>'; }
+  function yn(act, text, val) {
+    return '<div class="crit"><span style="flex: 1 1 260px; min-width: 0">' + text + '</span><div class="seg" role="group" aria-label="' + text + '">' +
+      '<button type="button" class="toggle' + (val === 'yes' ? ' on' : '') + '" aria-pressed="' + (val === 'yes') + '" data-act="' + act + ':yes">Yes</button>' +
+      '<button type="button" class="toggle' + (val === 'no' ? ' on' : '') + '" aria-pressed="' + (val === 'no') + '" data-act="' + act + ':no">No</button></div></div>';
+  }
+  function toast(title, body) {
+    var box = document.getElementById('toasts'), el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<div><div class="tt">' + title + '</div>' + (body ? '<div>' + body + '</div>' : '') + '</div><button type="button" class="x" aria-label="Close">×</button>';
+    el.querySelector('.x').addEventListener('click', function () { el.remove(); });
+    box.appendChild(el);
+    while (box.children.length > 3) box.removeChild(box.firstChild);
+    setTimeout(function () { if (el.parentNode) el.remove(); }, 7000);
+  }
+
+  // ---------- ECG image: a synthetic 12-lead drawn to scale (25 mm/s, 10 mm/mV) ----------
+  // Per lead: R, S, Q, T and P amplitudes in mV for a normal tracing; the cases override ST level (mV) and T amplitude.
+  var LEAD_BASE = { I: [0.7, -0.1, -0.05, 0.25, 0.1], II: [1.0, -0.15, -0.08, 0.3, 0.15], III: [0.5, -0.2, -0.08, 0.15, 0.1], aVR: [0.2, -0.8, 0, -0.2, -0.1], aVL: [0.4, -0.15, -0.05, 0.1, 0.05], aVF: [0.8, -0.15, -0.08, 0.25, 0.12],
+    V1: [0.2, -1.0, 0, -0.1, 0.05], V2: [0.4, -1.2, 0, 0.4, 0.05], V3: [0.8, -0.8, 0, 0.45, 0.05], V4: [1.4, -0.4, -0.05, 0.4, 0.08], V5: [1.3, -0.2, -0.08, 0.35, 0.08], V6: [1.0, -0.1, -0.08, 0.3, 0.08] };
+  var ECG_CASES = {
+    ste: { rate: 92, st: { V1: 0.2, V2: 0.45, V3: 0.5, V4: 0.35, III: -0.1, aVF: -0.1 }, t: { V1: 0.3, V2: 0.7, V3: 0.7, V4: 0.6 } },
+    nste: { rate: 98, st: { V4: -0.15, V5: -0.2, V6: -0.15, I: -0.05, aVL: -0.05 }, t: { V4: -0.3, V5: -0.35, V6: -0.3, I: 0.05, aVL: 0 } },
+    nonspecific: { rate: 84, st: { V4: -0.03, V5: -0.04, V6: -0.03 }, t: { V4: 0.06, V5: 0.05, V6: 0.05 } }
+  };
+  function mv(lead, cs, tb) {
+    var b = LEAD_BASE[lead], tA = (cs.t && cs.t[lead] != null) ? cs.t[lead] : b[3], st = (cs.st && cs.st[lead]) || 0, y = 0;
+    y += b[4] * Math.exp(-Math.pow((tb - 0.08) / 0.025, 2));
+    if (tb >= 0.165 && tb < 0.185) y += b[2] * (1 - Math.abs((tb - 0.175) / 0.01));
+    if (tb >= 0.185 && tb < 0.215) y += b[0] * (1 - Math.abs((tb - 0.2) / 0.015));
+    if (tb >= 0.215 && tb < 0.245) y += b[1] * (1 - Math.abs((tb - 0.23) / 0.015));
+    if (tb >= 0.245 && tb < 0.54) y += st * (tb < 0.36 ? 1 : (0.54 - tb) / 0.18);
+    y += tA * Math.exp(-Math.pow((tb - 0.42) / 0.045, 2));
+    return y;
+  }
+  function ecg12(pattern, pid) {
+    var cs = ECG_CASES[pattern], RR = 60 / cs.rate, W = 250, cal = 5, colW = (W - cal) / 4, colT = colW / 25;
+    var rows = [['I', 'aVR', 'V1', 'V4'], ['II', 'aVL', 'V2', 'V5'], ['III', 'aVF', 'V3', 'V6']];
+    function trace(lead, t0, t1, x0, yb) {
+      var pts = [];
+      for (var t = t0; t <= t1 + 1e-9; t += 0.02) pts.push((x0 + (t - t0) * 25).toFixed(2) + ',' + (yb - mv(lead, cs, (t + 0.25) % RR) * 10).toFixed(2));
+      return '<polyline fill="none" stroke="#1B1D45" stroke-width="0.35" stroke-linejoin="round" points="' + pts.join(' ') + '"></polyline>';
+    }
+    var g = 'g' + pid, out = '<svg viewBox="0 0 250 120" width="100%" role="img" aria-label="12-lead ECG" style="display: block"><defs>' +
+      '<pattern id="' + g + 's" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0H0V1" fill="none" stroke="#F3C9C9" stroke-width="0.12"/></pattern>' +
+      '<pattern id="' + g + 'b" width="5" height="5" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="url(#' + g + 's)"/><path d="M5 0H0V5" fill="none" stroke="#E7A8A8" stroke-width="0.3"/></pattern></defs>' +
+      '<rect width="250" height="120" fill="#FFF8F8"/><rect width="250" height="120" fill="url(#' + g + 'b)"/>';
+    for (var r = 0; r < 4; r++) {
+      var yb = r * 30 + 18;
+      out += '<polyline fill="none" stroke="#1B1D45" stroke-width="0.35" points="0.5,' + yb + ' 0.5,' + (yb - 10) + ' 4.5,' + (yb - 10) + ' 4.5,' + yb + '"></polyline>';
+      if (r < 3) rows[r].forEach(function (lead, c) {
+        var x0 = cal + c * colW;
+        out += '<text x="' + (x0 + 1.5) + '" y="' + (r * 30 + 5) + '" font-size="4" font-family="IBM Plex Mono, monospace" fill="#8E1F1F">' + lead + '</text>' + trace(lead, c * colT, (c + 1) * colT, x0, yb);
+      });
+      else out += '<text x="6.5" y="95" font-size="4" font-family="IBM Plex Mono, monospace" fill="#8E1F1F">II</text>' + trace('II', 0, 4 * colT, cal, yb);
+    }
+    return '<div class="ecg">' + out + '</svg></div>';
+  }
+
+  // ---------- Orders ----------
+  var ORDER_LABEL = { ecg: '12-lead ECG', trop: 'Bedside troponin', trop2: 'Bedside troponin, repeat', echo: 'Echo', glu: 'Blood glucose', cr: 'Creatinine' };
+  function addOrder(e, type, opts) {
+    opts = opts || {};
+    var o = { id: ++e.seq, type: type, label: ORDER_LABEL[type], at: e.now, due: opts.due || null, status: 'ordered', doneAt: null, result: null, by: opts.by || 'MO' };
+    e.orders.push(o);
+    log(e, o.label + ' ordered' + (opts.by ? ' (' + opts.by + ')' : '') + (o.due ? ', due by ' + T(o.due) : ''));
+    return o;
+  }
+  function order(e, type) { for (var i = 0; i < e.orders.length; i++) if (e.orders[i].type === type) return e.orders[i]; return null; }
+  function hasEcg(e) { return !!order(e, 'ecg'); }
+
+  // ---------- Complaint prompts ----------
+  function evalComplaint(e, p) {
+    var c = e.complaint.toLowerCase(), kind = null;
+    if (/chest/.test(c)) kind = 'chest';
+    else if (/abdom|epigast|gastric|stomach|heartburn|indigest/.test(c)) {
+      var risk = /diabet|hypert|tobacco|smok/i.test(p.conds.join(' ')) || p.vitals.sys >= 140;
+      if (p.age >= 40 && risk) kind = 'abdo';
+    } else if (/breath/.test(c)) kind = 'breath';
+    if (kind && !hasEcg(e)) e.cp = { kind: kind, status: 'open', reason: '' }; else e.cp = null;
+  }
+  var DISMISS = [['', 'Choose a reason'], ['done', 'ECG already done today'], ['other', 'Pain clearly has another cause (injury, local tenderness)'], ['declined', 'Patient declined the ECG']];
+  function complaintPrompt(e, p) {
+    if (!e.cp) return '';
+    var k = e.cp.kind, s = e.cp.status;
+    if (s === 'dismissed') {
+      return note('muted', 'Dismissed ' + T(e.cp.at), 'ECG recommendation dismissed', '', select('dis-' + e.pid, e.pid + ':cpReason', 'Reason', DISMISS, e.cp.reason) + (e.cp.reason ? '<p class="pb small">Recorded for the monthly review of dismissed recommendations.</p>' : ''));
+    }
+    if (k === 'chest') {
+      return cds('inline', 'chest pain', 'Consider doing an ECG within 10 minutes', 'Any adult with chest pain, whether or not hypertension is on record. Accept orders the ECG now and starts the 10-minute clock.',
+        '<div class="actrow">' + btn(e.pid + ':cpAccept', 'Accept: order ECG now', true) + btn(e.pid + ':cpDismiss', 'Dismiss') + '</div>');
+    }
+    if (k === 'abdo') {
+      return cds('inline', 'atypical presentation', 'Consider doing an ECG', 'Upper abdominal pain in a ' + p.age + '-year-old with ' + riskWords(p) + ' can be a heart attack. Rule out the heart before treating it as gastritis.',
+        '<div class="actrow">' + btn(e.pid + ':cpAccept', 'Order ECG', true) + btn(e.pid + ':cpDismiss', 'Not needed') + '</div>');
+    }
+    return cds('inline', 'symptom', 'Consider an ECG', 'New breathlessness on effort can be the only sign of angina or heart failure.',
+      '<div class="actrow">' + btn(e.pid + ':cpAccept', 'Order ECG', true) + btn(e.pid + ':cpDismiss', 'Not needed') + '</div>');
+  }
+  function riskWords(p) {
+    var w = [];
+    if (/diabet/i.test(p.conds.join(' '))) w.push('diabetes');
+    if (/hypert/i.test(p.conds.join(' '))) w.push('hypertension');
+    else if (p.vitals.sys >= 140) w.push('a raised BP today');
+    if (/tobacco|smok/i.test(p.conds.join(' '))) w.push('tobacco use');
+    return w.length ? w.join(' and ') : 'these risk factors';
+  }
+
+  // ---------- Pathway ----------
+  function pathway(e, p) {
+    if (!e.ecg || (e.ecg.disagree && !e.ecg.confirmedAt)) return null;
+    if (p.pattern === 'ste') return 'ste';
+    if (p.acuity === 'acute') return 'nste';
+    return 'stable';
+  }
+  function confText(e) {
+    if (!e.ecg) return '';
+    if (e.ecg.confirmedAt) return 'confirmed by ' + S().cardio + ', ' + S().hubShort + ', at ' + T(e.ecg.confirmedAt);
+    if (e.ecg.sentAt) return 'cardiologist confirmation pending';
+    if (e.ecg.agreed) return 'agreed by the MO';
+    return 'not yet confirmed by a clinician';
+  }
+  var GIVEN = [['asa', 'Aspirin 300 mg, chewed'], ['p2y', 'Second antiplatelet drug, per the hub protocol'], ['hep', 'Heparin, per the hub protocol'], ['ntg', 'Nitrate, only if systolic BP is above 90 and no sildenafil-type drug in the last 48 hours'], ['o2', 'Oxygen, only if saturation is below 90%']];
+  var CI = [['ich', 'Bleeding in the brain at any time, or a stroke in the last 6 months', true], ['surg', 'Major surgery, head injury or other trauma in the last month', true], ['gi', 'Bleeding from the gut in the last month', true], ['bp', 'BP above 180/110 despite treatment', false], ['oac', 'Already taking a blood thinner such as warfarin', false]];
+  function givenList(e) {
+    return '<div class="field"><span class="lbl">Give now, tick as given</span>' + GIVEN.map(function (g) {
+      var at = e.given[g[0]];
+      return check(e.pid + ':given:' + g[0], g[1], !!at, at ? chip('green', 'given ' + T(at)) : '');
+    }).join('') + '</div>';
+  }
+  function givenText(e) {
+    var t = GIVEN.filter(function (g) { return e.given[g[0]]; }).map(function (g) { return g[1].split(',')[0].toLowerCase() + ' at ' + T(e.given[g[0]]); });
+    return t.length ? 'Given at the UHC: ' + t.join(', ') + '.' : 'No treatment recorded yet.';
+  }
+
+  function steCard(e, p) {
+    var h = e.onset, pick = pickCentre(e, 'emergency'), c = pick.chosen, exp = c.exp, late = (h === '14' || h === 'days' || h === 'weeks');
+    var anyAbs = CI.some(function (x) { return x[2] && e.lysisCI[x[0]]; }), anyRel = CI.some(function (x) { return !x[2] && e.lysisCI[x[0]]; });
+    var kind = late ? 'late' : exp <= 120 ? 'pci' : e.lysisAt ? 'postlysis' : anyAbs ? 'nolysis' : 'lysis';
+    var facts = '<ul class="facts"><li>Symptoms started ' + onsetText(h) + '</li><li>ECG at ' + T(e.ecg.at) + ': ST elevation V1–V4 (AI read, ' + confText(e) + ')</li><li>Limit: the artery should be opened within 120 minutes of the ECG; if no centre can do that, fibrinolysis within 10 minutes, then transfer</li></ul>' + centreListHtml(e, 'emergency', pick);
+    var title, body, cls = 'stop', extra = '';
+    if (kind === 'pci') {
+      title = 'Refer now for primary PCI';
+      body = '';
+    } else if (kind === 'lysis') {
+      title = 'Give fibrinolysis within 10 minutes, by ' + T(e.ecg.at + 10) + ', then refer';
+      body = 'PCI at ' + c.name + ' would be about ' + exp + ' minutes after the ECG, beyond the 120-minute limit. ' + (anyRel ? 'A reason to weigh against fibrinolysis is ticked: decide with the hub cardiologist now.' : 'Check the reasons against it first.');
+      extra += '<div class="field"><span class="lbl">Reasons not to give fibrinolysis</span>' + CI.map(function (c) { return check(e.pid + ':lysisCI:' + c[0], c[1], !!e.lysisCI[c[0]], c[2] ? chip('red', 'rules it out') : chip('amber', 'weigh it')); }).join('') + '</div>';
+    } else if (kind === 'nolysis') {
+      title = 'Do not give fibrinolysis: refer for PCI despite the delay';
+      body = 'A reason that rules out fibrinolysis is ticked. Call the hub cardiologist and send the referral now.';
+      extra += '<div class="field"><span class="lbl">Reasons not to give fibrinolysis</span>' + CI.map(function (c) { return check(e.pid + ':lysisCI:' + c[0], c[1], !!e.lysisCI[c[0]], c[2] ? chip('red', 'rules it out') : chip('amber', 'weigh it')); }).join('') + '</div>';
+    } else if (kind === 'postlysis') {
+      cls = 'inline';
+      title = 'Fibrinolysis given at ' + T(e.lysisAt) + ': refer for angiography';
+      body = 'Check the ST segments between ' + T(e.lysisAt + 60) + ' and ' + T(e.lysisAt + 90) + '. If less than half has resolved, rescue PCI at once; if resolved, angiography within 2–24 hours. Send the referral now so the hub is ready either way.';
+    } else {
+      title = 'Beyond 12 hours: no fibrinolysis. Refer for PCI';
+      body = 'At once if the pain continues, BP falls or the rhythm is unstable; otherwise PCI is still worth doing up to 48 hours from onset. Confirm the onset time with the patient.';
+    }
+    extra += givenList(e);
+    var act = '';
+    if (e.referral) act = chip('green', 'Referral ' + (e.referral.status === 'draft' ? 'drafted below' : 'sent ' + T(e.referral.sentAt)));
+    else if (e.rec.status === 'declined') act = select('rec-' + e.pid, e.pid + ':recReason', 'Reason for not referring now', [['', 'Choose a reason'], ['dnr', 'Patient or family declined transfer'], ['other', 'Other, noted in the record']], e.rec.reason || '') + btn(e.pid + ':recReopen', 'Reconsider', false, false, true);
+    else if (kind === 'lysis') act = '<div class="actrow">' + btn(e.pid + ':lysis', 'Record fibrinolysis given', true) + btn(e.pid + ':recAccept:lysisfirst', 'Refer without fibrinolysis') + '</div>';
+    else act = '<div class="actrow">' + btn(e.pid + ':recAccept:' + kind, kind === 'pci' ? 'Yes, refer for primary PCI' : kind === 'postlysis' ? 'Yes, refer for angiography' : 'Yes, refer for PCI', true) + btn(e.pid + ':recDecline', 'Not now') + '</div>';
+    return cds(cls, 'STEMI pathway', title, body, facts + extra + act);
+  }
+
+  var VH = [['pain', 'Pain continuing, or coming back, despite treatment'], ['shock', 'Low BP or signs of shock'], ['hf', 'Acute heart failure: breathless, with crackles in the lungs'], ['rhythm', 'Dangerous heart rhythm, or collapse'], ['st', 'ST changes that come and go, especially brief ST elevation']];
+  function nsteCard(e, p) {
+    var t1 = order(e, 'trop'), t2 = order(e, 'trop2');
+    var anyVH = VH.some(function (v) { return e.vh[v[0]]; });
+    var vhList = '<div class="field"><span class="lbl">Very high risk now? Any of these means immediate transfer</span>' + VH.map(function (v) { return check(e.pid + ':vh:' + v[0], v[1], !!e.vh[v[0]]); }).join('') + '</div>';
+    var pick = pickCentre(e, anyVH ? 'emergency' : 'urgent'), c = pick.chosen;
+    var refAct = function (kind, label) {
+      if (e.referral) return chip('green', 'Referral ' + (e.referral.status === 'draft' ? 'drafted below' : 'sent ' + T(e.referral.sentAt)));
+      return '<div class="actrow">' + btn(e.pid + ':recAccept:' + kind, label, true) + btn(e.pid + ':recDecline', 'Not now') + '</div>';
+    };
+    if (anyVH) return cds('stop', 'NSTE-ACS pathway', 'Very high risk: refer now for angiography within 2 hours', 'Do not wait for troponin.', vhList + centreListHtml(e, 'emergency', pick) + givenList(e) + refAct('vh', 'Yes, refer now'));
+    if (!t1) return cds('inline', 'no ST elevation', 'Order a bedside troponin now; repeat at 3 hours if normal', 'The ECG shows no ST elevation but the symptoms fit a heart attack. One early normal result does not rule it out.',
+      vhList + '<div class="actrow">' + btn(e.pid + ':tropOrder', 'Order troponin', true) + btn(e.pid + ':tropDismiss', 'Not needed') + '</div>');
+    if (t1.status === 'ordered') return note('due', 'Troponin pending', 'Troponin ordered at ' + T(t1.at) + ': result expected in about 15 minutes', 'Enter the result from the bedside reader in the orders above. Give aspirin and treat the pain while you wait.', vhList + givenList(e));
+    if (t1.result === 'raised' || (t2 && t2.result === 'raised')) {
+      var when = t1.result === 'raised' ? 'Troponin raised at ' + T(t1.doneAt) : 'Repeat troponin raised at ' + T(t2.doneAt) + ' (first normal at ' + T(t1.doneAt) + ')';
+      return cds('inline', 'NSTEMI', 'NSTEMI: refer for angiography within 24 hours', when + ' with symptoms means a heart attack. The centre books a CCU bed; angiography within 24 hours, sooner if the pain persists.', vhList + centreListHtml(e, 'urgent', pick) + givenList(e) + refAct('nstemi', 'Yes, refer for angiography'));
+    }
+    if (!t2 || t2.status === 'ordered') return note('due', 'Troponin pending', 'First troponin normal at ' + T(t1.doneAt) + ': repeat due at ' + T(t1.doneAt + 180), 'One early normal result does not rule out a heart attack. Keep her in the emergency room, repeat the ECG if the pain changes, and enter the repeat result in the orders above when it is back.', vhList);
+    return cds('ok', 'no ST elevation', 'Two normal troponins 3 hours apart: heart attack unlikely', 'If she is pain-free and a repeat ECG is unchanged, discharge with an NCD corner review and angina check within a week. Tell her to come back at once if the pain returns. Discuss with the hub if in doubt.',
+      vhList + '<div class="actrow">' + (e.rec.booked ? chip('green', 'Review booked ' + e.rec.booked) : btn(e.pid + ':bookReview', 'Book NCD corner review within a week', true)) + '</div>');
+  }
+
+  var MM = ['Aspirin 75 mg once daily', 'Atorvastatin 40 mg at night', 'Bisoprolol 2.5 mg once daily', 'Glyceryl trinitrate spray, under the tongue for chest pain'];
+  function stableCard(e, p) {
+    var ec = order(e, 'echo');
+    if (!ec) return cds('inline', 'abnormal ECG with symptoms', 'Order an echo', 'Breathless on effort with ST/T changes: an echo shows whether the heart muscle is weak (EF) or moving abnormally, which decides the next step.',
+      '<div class="actrow">' + btn(e.pid + ':echoOrder', 'Order echo', true) + btn(e.pid + ':echoDismiss', 'Not needed') + '</div>');
+    if (ec.status === 'ordered') return note('due', 'Echo pending', 'Echo ordered at ' + T(ec.at), 'Enter the result in the orders above when it is done.');
+    var lowEf = +e.echo.ef < 40, criteria = [];
+    if (e.restPain === 'yes') criteria.push('pain at rest or lasting more than 20 minutes');
+    if (e.lowEffort === 'yes') criteria.push('angina at low effort');
+    if (lowEf) criteria.push('EF ' + e.echo.ef + '% with suspected coronary disease');
+    var mmDone = e.rxNew.length > 0;
+    var crit = '<div class="field"><span class="lbl">Criteria for angiography</span>' +
+      yn(e.pid + ':restPain', 'Pain at rest, or lasting more than 20 minutes, today', e.restPain) +
+      yn(e.pid + ':lowEffort', 'Angina at low effort, such as walking on the flat', e.lowEffort) +
+      '<div class="crit"><span style="flex: 1 1 260px">Angina not controlled despite medicines</span>' + chip('grey', mmDone ? 'Just started: review in 4 weeks' : 'Not on medicines yet') + '</div>' +
+      '<div class="crit"><span style="flex: 1 1 260px">EF below 40% with suspected coronary disease (echo: EF ' + e.echo.ef + '%, ' + e.echo.wm + ')</span>' + chip(lowEf ? 'indigo' : 'grey', lowEf ? 'Met' : 'Not met') + '</div></div>';
+    var mm = '<div class="field"><span class="lbl">Medical management, start today</span><ul class="facts">' + MM.map(function (m) { return '<li>' + m + '</li>'; }).join('') + '</ul>' +
+      (mmDone ? chip('green', 'Prescribed ' + T(e.rxNewAt)) : btn(e.pid + ':prescribeMM', 'Prescribe all four', true)) + '</div>';
+    if (e.restPain === 'yes') return cds('stop', 'stable coronary disease', 'Pain at rest today: treat as an emergency', 'Repeat the ECG now and follow the chest pain steps. Do not wait for the planned referral.', crit);
+    var title, body, act, pick = pickCentre(e, 'planned');
+    if (criteria.length) {
+      title = 'Start medicines today and refer for angiography, urgent (within 2 weeks)';
+      body = 'Criteria met: ' + criteria.join('; ') + '.';
+      act = centreListHtml(e, 'planned', pick) + (e.referral ? chip('green', 'Referral ' + (e.referral.status === 'draft' ? 'drafted below' : 'sent ' + T(e.referral.sentAt))) : '<div class="actrow">' + btn(e.pid + ':recAccept:angio', 'Refer for angiography', true) + btn(e.pid + ':recDecline', 'Not now') + '</div>');
+    } else {
+      title = 'Medicines first; review in 4 weeks';
+      body = 'No criterion for angiography is met. In stable patients, routine angiography with stenting did not reduce heart attacks or deaths in the ISCHEMIA trial; its benefit is fewer angina symptoms. Refer if angina continues despite medicines.';
+      act = '<div class="actrow">' + (e.rec.booked ? chip('green', 'Review booked ' + e.rec.booked) : btn(e.pid + ':bookReview4', 'Book review in 4 weeks', true)) + '</div>';
+    }
+    if (e.rec.status === 'declined') act = select('rec-' + e.pid, e.pid + ':recReason', 'Reason for not referring now', [['', 'Choose a reason'], ['dnr', 'Patient declined'], ['other', 'Other, noted in the record']], e.rec.reason || '') + btn(e.pid + ':recReopen', 'Reconsider', false, false, true);
+    return cds('inline', 'stable coronary disease', title, body, '<ul class="facts"><li>' + (e.complaint || 'Breathlessness on exertion') + ', ' + onsetText(e.onset) + '</li><li>ECG at ' + T(e.ecg.at) + ': non-specific ST/T changes (AI read, ' + confText(e) + ')</li><li>Echo at ' + T(ec.doneAt) + ': EF ' + e.echo.ef + '%, ' + e.echo.wm + '</li></ul>' + mm + crit + act);
+  }
+
+  // ---------- Referral ----------
+  function makeReferral(e, p, kind) {
+    var mode = kind === 'angio' ? 'planned' : (kind === 'nstemi' ? 'urgent' : 'emergency');
+    var c = pickCentre(e, mode).chosen, amb = c.amb, now = e.now;
+    e.centre = c.key;
+    var consent = e.referral ? e.referral.consent : false;
+    var r = { kind: kind, to: c.name, toKey: c.key, transport: 'amb', status: 'draft', createdAt: now, consent: consent };
+    var who = p.age + '-year-old ' + p.who;
+    var v = 'BP ' + p.vitals.bp + ', pulse ' + p.vitals.pulse + ', oxygen saturation ' + p.vitals.spo2 + '%.';
+    if (kind === 'pci' || kind === 'late' || kind === 'postlysis' || kind === 'lysisfirst' || kind === 'nolysis') {
+      r.service = kind === 'postlysis' ? 'Angiography after fibrinolysis (rescue PCI if ST not resolved)' : 'Primary PCI';
+      r.urgency = 'Emergency';
+      r.expected = T(now + 10 + amb);
+      r.reason = who + ' with ' + (e.complaint || 'chest pain').toLowerCase() + ' starting ' + onsetPhrase(e.onset) + '. ECG at ' + T(e.ecg.at) + ': ST elevation in V1–V4 (AI read, ' + confText(e) + '). ' + v + ' ' + givenText(e) +
+        (kind === 'postlysis' ? ' Fibrinolysis given at ' + T(e.lysisAt) + '; ST check due ' + T(e.lysisAt + 60) + '–' + T(e.lysisAt + 90) + '.' : '') +
+        (kind === 'late' ? ' Presenting beyond 12 hours from onset; no fibrinolysis given.' : '') +
+        (kind === 'nolysis' || kind === 'lysisfirst' ? ' Transfer time exceeds the 120-minute limit; fibrinolysis not given (' + (kind === 'nolysis' ? 'contraindicated' : 'clinician decision') + ').' : '') +
+        ' Requested: ' + (kind === 'postlysis' ? 'angiography after fibrinolysis, rescue PCI if the ST segments have not resolved' : 'primary PCI') + '. Ambulance leaving about ' + T(now + 10) + ', expected arrival ' + r.expected + '.';
+    } else if (kind === 'vh' || kind === 'nstemi') {
+      var t1 = order(e, 'trop'), t2 = order(e, 'trop2');
+      r.service = 'Angiography' + (kind === 'vh' ? ', immediate (within 2 hours)' : ', within 24 hours');
+      r.urgency = kind === 'vh' ? 'Emergency' : 'Urgent';
+      r.expected = T(now + 10 + amb);
+      var trop = t1 && t1.result ? ' Bedside troponin at ' + T(t1.doneAt) + ': ' + t1.result + (t2 && t2.result ? '; repeat at ' + T(t2.doneAt) + ': ' + t2.result : '') + '.' : ' Troponin not yet resulted.';
+      var vh = VH.filter(function (x) { return e.vh[x[0]]; }).map(function (x) { return x[1].toLowerCase(); });
+      r.reason = who + ' with ' + p.conds.map(function (c) { return c.split(',')[0].toLowerCase(); }).join(' and ') + '. ' + e.complaint + ' starting ' + onsetPhrase(e.onset) + '. ECG at ' + T(e.ecg.at) + ': no ST elevation; ST depression and T-wave inversion V4–V6 (AI read, ' + confText(e) + ').' + trop + ' ' + v + ' ' + givenText(e) +
+        (vh.length ? ' Very high risk features: ' + vh.join('; ') + '.' : '') + ' Working diagnosis: ' + (kind === 'vh' ? 'NSTE-ACS, very high risk' : 'NSTEMI') + '. Requested: ' + (kind === 'vh' ? 'immediate angiography (within 2 hours)' : 'angiography within 24 hours') + ' and a CCU bed. Expected arrival ' + r.expected + '.';
+    } else {
+      var ec = order(e, 'echo');
+      r.service = 'Angiography, planned';
+      r.urgency = 'Urgent, within 2 weeks';
+      r.transport = 'own';
+      r.expected = 'By the booked date';
+      var crit = [];
+      if (e.lowEffort === 'yes') crit.push('angina at low effort');
+      if (+e.echo.ef < 40) crit.push('EF ' + e.echo.ef + '% with suspected coronary disease');
+      r.reason = who + ' with hypertension since Feb 2026. ' + (e.complaint || 'Breathlessness on exertion') + ', starting ' + onsetPhrase(e.onset) + '. ECG at ' + T(e.ecg.at) + ': non-specific ST/T changes V4–V6 (AI read, ' + confText(e) + '). Echo at ' + T(ec.doneAt) + ': EF ' + e.echo.ef + '%, ' + e.echo.wm + '. ' + v +
+        ' Medical management started today: ' + (e.rxNew.length ? 'aspirin, atorvastatin, bisoprolol, GTN spray' : 'not yet') + '. Criteria met: ' + crit.join('; ') + '. Requested: angiography within 2 weeks. Can attend Fridays or the first slot of the morning.';
+    }
+    e.referral = r;
+    e.rec.status = 'accepted';
+    log(e, 'Referral drafted from the recommendation: ' + r.service);
+  }
+  function referralCard(e, p) {
+    var r = e.referral;
+    if (!r) return '';
+    var st = r.status === 'draft' ? chip('amber', 'Draft, auto-filled') : r.status === 'sent' ? chip('indigo', 'Sent ' + T(r.sentAt) + ' · awaiting acknowledgement') : chip('green', 'Acknowledged ' + T(r.ackAt));
+    var body;
+    if (r.status === 'draft') {
+      body = '<div class="pad">' +
+        select('ref-to-' + e.pid, e.pid + ':refTo', 'To', centres().map(function (c) { return [c.key, c.name]; }), r.toKey) +
+        '<div class="row2"><div class="field"><span class="lbl">Service</span><div class="ro">' + r.service + '</div></div><div class="field"><span class="lbl">Urgency</span><div class="ro">' + r.urgency + '</div></div></div>' +
+        '<div class="field"><label class="lbl" for="ref-reason-' + e.pid + '">Reason for referral, auto-filled from the record; edit if needed</label><textarea id="ref-reason-' + e.pid + '" data-act="' + e.pid + ':refReason">' + r.reason + '</textarea></div>' +
+        '<div class="row2">' + select('ref-tr-' + e.pid, e.pid + ':refTransport', 'Transport', [['amb', 'UHC ambulance'], ['own', 'Own transport']], r.transport) +
+        '<div class="field"><span class="lbl">Expected arrival</span><div class="ro">' + r.expected + '</div></div></div>' +
+        '<div class="field"><span class="lbl">Attached automatically</span><div class="actrow">' + chip('grey', 'ECG image and AI read') + chip('grey', 'Vitals') + chip('grey', 'Medicines and allergies') + (e.ecg && e.ecg.confirmedAt ? chip('grey', 'Cardiologist reply') : '') + (order(e, 'echo') && order(e, 'echo').result ? chip('grey', 'Echo report') : '') + '</div></div>' +
+        '<div class="field"><span class="lbl">Consent</span>' + check(e.pid + ':refConsent', 'Patient (or family) agrees to the referral and to the hub opening the record', r.consent) + '</div>' +
+        '<div class="actrow">' + btn(e.pid + ':refSend', 'Send referral' + (r.urgency === 'Emergency' ? ' and pre-alert the hub' : ''), true, !r.consent) + '</div></div>';
+    } else {
+      body = '<div class="pad"><dl class="kv"><dt>To</dt><dd>' + r.to + '</dd><dt>Service</dt><dd>' + r.service + ' · ' + r.urgency + '</dd><dt>Reason</dt><dd>' + r.reason + '</dd><dt>Transport</dt><dd>' + (r.transport === 'amb' ? 'UHC ambulance' : 'Own transport') + ' · expected ' + r.expected + '</dd></dl>' +
+        (r.status === 'acked' ? reply('ok', 'Hub reply ' + T(r.ackAt), r.ackText, '') : '<p class="status">' + (r.urgency === 'Emergency' ? 'The hub has 15 minutes to acknowledge; the hub director is alerted if it does not.' : 'The hub has 24 hours to acknowledge.') + '</p>') + '</div>';
+    }
+    return card('Referral', st, body);
+  }
+  var ACK = {
+    pci: 'Acknowledged by {coord}, referral coordinator, {hub}: cath lab team activated, bed ready. Bring him straight to the cath lab.',
+    lysisfirst: 'Acknowledged by {coord}, {hub}: cath lab team activated. Bring him straight to the cath lab.',
+    nolysis: 'Acknowledged by {coord}, {hub}: cath lab team activated. Bring him straight to the cath lab.',
+    late: 'Acknowledged by {coord}, {hub}: cardiologist will see him on arrival; cath lab on standby.',
+    postlysis: 'Acknowledged by {coord}, {hub}: cath lab on standby for rescue PCI; CCU bed ready.',
+    vh: 'Acknowledged by {coord}, {hub}: cath lab team activated, CCU bed ready.',
+    nstemi: 'Acknowledged by {coord}, {hub}: CCU bed booked; angiography planned for tomorrow morning, sooner if the pain persists.',
+    angio: 'Acknowledged by {coord}, {hub}: angiography booked for {slot}, first slot of the morning. The patient has been told by SMS.'
+  };
+
+  // ---------- Prescription ----------
+  // Grouped as an NCD corner formulary would be; doses are the usual protocol steps, to be confirmed against the national list.
+  var RX_GROUPS = [
+    ['Blood pressure', [['amlo5', 'Amlodipine 5 mg, once daily'], ['amlo10', 'Amlodipine 10 mg, once daily'], ['los50', 'Losartan 50 mg, once daily'], ['los100', 'Losartan 100 mg, once daily'], ['hctz', 'Hydrochlorothiazide 25 mg, once in the morning'], ['aten', 'Atenolol 50 mg, once daily']]],
+    ['Heart', [['asa', 'Aspirin 75 mg, once daily'], ['clo', 'Clopidogrel 75 mg, once daily'], ['ator20', 'Atorvastatin 20 mg, at night'], ['ator40', 'Atorvastatin 40 mg, at night'], ['biso', 'Bisoprolol 2.5 mg, once daily'], ['gtn', 'Glyceryl trinitrate spray, under the tongue for chest pain']]],
+    ['Diabetes', [['met500', 'Metformin 500 mg, twice daily'], ['met1000', 'Metformin 1 g, twice daily'], ['glic', 'Gliclazide 80 mg, once daily']]],
+    ['Other', [['para', 'Paracetamol 500 mg, up to 4 times a day'], ['omep', 'Omeprazole 20 mg, twice a day'], ['amox', 'Amoxicillin 500 mg, 3 times a day'], ['ibu', 'Ibuprofen 400 mg, 3 times a day']]]
+  ];
+  function rxLabel(k) { for (var g = 0; g < RX_GROUPS.length; g++) for (var i = 0; i < RX_GROUPS[g][1].length; i++) if (RX_GROUPS[g][1][i][0] === k) return RX_GROUPS[g][1][i][1]; return k; }
+  function rxSelect(e) {
+    return '<div class="field"><label class="lbl" for="rxadd-' + e.pid + '">Add a medicine</label><select id="rxadd-' + e.pid + '" data-act="' + e.pid + ':rxAdd"><option value="">Choose</option>' +
+      RX_GROUPS.map(function (g) { return '<optgroup label="' + g[0] + '">' + g[1].map(function (o) { return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('') + '</optgroup>'; }).join('') + '</select></div>';
+  }
+  function rxCard(e, p) {
+    var rows = e.rx.map(function (m, i) {
+      return '<div class="medrow"><span class="n">' + m.split(',')[0] + '</span><span class="d">' + (m.split(',').slice(1).join(',').trim() || 'as before') + '</span><button type="button" class="btn small" aria-label="Stop ' + m.split(',')[0] + '" data-act="' + e.pid + ':rxStop:' + i + '">Stop</button></div>';
+    }).join('');
+    var added = e.rxNew.map(function (m) { return '<div class="medrow"><span class="n">' + m.split(',')[0] + '</span><span class="d">' + (m.split(',').slice(1).join(',').trim()) + '</span>' + chip('green', 'Added today') + '</div>'; }).join('');
+    var stopped = e.stopped.map(function (s) { return '<div class="medrow"><span class="n" style="text-decoration: line-through; color: #5A6472">' + s + '</span>' + chip('grey', 'Stopped today') + '</div>'; }).join('');
+    var body = '<div class="pad">' + (rows || added || stopped ? '<div>' + rows + added + stopped + '</div>' : '<p class="hintline">No medicines on record.</p>') +
+      '<div class="row2">' + rxSelect(e) + '</div></div>';
+    return card('Prescription', e.rxNew.length || e.stopped.length ? chip('amber', 'Changed today') : '', body);
+  }
+
+  // ---------- Encounter render ----------
+  function ordersCard(e, p) {
+    var rows = e.orders.map(function (o) {
+      var st, act = '';
+      if (o.status === 'ordered') {
+        st = chip(o.due ? 'amber' : 'indigo', 'Ordered ' + T(o.at) + (o.due ? ' · due by ' + T(o.due) : ''));
+        if (o.type === 'ecg') act = btn(e.pid + ':upload:' + o.id, 'Upload ECG from the machine', true, false, true);
+        else if (o.type === 'trop' || o.type === 'trop2') act = select('res-' + o.id, e.pid + ':tropResult:' + o.id, 'Result from the bedside reader', [['', 'Enter result'], ['normal', 'Normal: below the cut-off'], ['raised', 'Raised: above the cut-off']], '');
+        else if (o.type === 'echo') act = '<div class="row2">' + select('ef-' + o.id, e.pid + ':echoEf', 'EF', [['', 'Enter'], ['38', '38%'], ['45', '45%'], ['55', '55%']], e.echo.ef || '') + select('wm-' + o.id, e.pid + ':echoWm', 'Wall motion', [['', 'Enter'], ['anterior wall-motion abnormality', 'Anterior abnormality'], ['normal wall motion', 'Normal']], e.echo.wm || '') + '</div>' + (e.echo.ef && e.echo.wm ? btn(e.pid + ':echoSave:' + o.id, 'Save echo result', true, false, true) : '');
+        else act = chip('grey', 'Awaiting result');
+      } else {
+        st = chip('green', 'Done ' + T(o.doneAt) + (o.type === 'ecg' && o.due ? (o.doneAt <= o.due ? ', within 10 minutes' : ', ' + (o.doneAt - o.at) + ' minutes after order') : ''));
+        if (o.type === 'trop' || o.type === 'trop2') act = chip(o.result === 'raised' ? 'red' : 'green', 'Troponin ' + o.result);
+        else if (o.type === 'echo') act = chip('indigo', 'EF ' + e.echo.ef + '%, ' + e.echo.wm);
+        else if (o.type === 'ecg') act = chip('indigo', 'Image and AI read below');
+      }
+      return '<tr><td><strong>' + o.label + '</strong><div class="sub">' + (o.by === 'MO' ? 'Dr M. Rahman' : o.by) + '</div></td><td>' + st + '</td><td>' + act + '</td></tr>';
+    }).join('');
+    var table = e.orders.length ? '<div style="overflow-x: auto"><table><thead><tr><th>Order</th><th>Status</th><th>Result or action</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="hintline" style="padding: 14px 20px">No orders yet.</p>';
+    var add = '<div class="pad" style="border-top: 1px solid #ECEFF3"><div class="row2">' + select('add-' + e.pid, e.pid + ':addOrder', 'Add an order', [['', 'Choose'], ['ecg', ORDER_LABEL.ecg], ['trop', ORDER_LABEL.trop], ['echo', ORDER_LABEL.echo], ['glu', ORDER_LABEL.glu], ['cr', ORDER_LABEL.cr]], '') + '</div></div>';
+    var results = '';
+    if (e.ecg) {
+      var ai = '<div class="cds muted" style="background: #fff"><div class="k"><span class="kind">AI interpretation</span>' + chip('ai', 'AI · for clinician review, not a diagnosis') + '</div><p class="pb">' + p.ai + '</p>';
+      if (e.ecg.disagree) ai += '<p class="pb small">Clinician reading differs: ' + e.ecg.disagree + '. ' + (e.ecg.confirmedAt ? 'The cardiologist has confirmed the AI read, so the recommendations have resumed.' : 'Recommendations paused for this ECG; send to the cardiologist if in doubt.') + '</p>';
+      var acts = '';
+      if (e.ecg.confirmedAt) acts = reply('ok', 'Cardiologist reply ' + T(e.ecg.confirmedAt), S().cardio + ', ' + S().hubShort, p.cardio);
+      else if (e.ecg.sentAt) acts = chip('indigo', 'Sent to ' + S().cardio + ', ' + S().hubShort + ', at ' + T(e.ecg.sentAt) + ' · reply due by ' + T(e.ecg.sentAt + 10));
+      else acts = '<div class="actrow">' + (e.ecg.agreed ? chip('green', 'Agreed by the MO ' + T(e.ecg.agreedAt)) : btn(e.pid + ':aiAgree', 'Agree with the AI read', false, false, true)) + btn(e.pid + ':aiSend', 'Send to cardiologist for confirmatory interpretation', !e.ecg.agreed, false, true) + (e.ecg.disagree ? '' : select('dis-ai-' + e.pid, e.pid + ':aiDisagree', 'My reading differs', [['', 'Choose'], ['Normal ECG', 'Normal ECG'], ['Different abnormality', 'Different abnormality, noted in the record']], '')) + '</div>';
+      ai += acts + '</div>';
+      results = '<div class="pad" style="border-top: 1px solid #ECEFF3"><div class="field"><span class="lbl">ECG image · uploaded ' + T(e.ecg.at) + ' · 12-lead · 25 mm/s, 10 mm/mV · 2.5-second segments with a 10-second lead II strip</span>' + ecg12(p.pattern, e.pid) + '</div>' + ai + '</div>';
+    }
+    return card('Orders and results', e.orders.length ? chip('grey', e.orders.length + (e.orders.length === 1 ? ' order' : ' orders')) : '', table + results + add);
+  }
+
+  function planCard(e, p) {
+    var pw = pathway(e, p), inner = '';
+    if (pw === 'ste') inner = steCard(e, p);
+    else if (pw === 'nste') inner = e.tropDismissed ? note('muted', 'Dismissed', 'Troponin recommendation dismissed', '') : nsteCard(e, p);
+    else if (pw === 'stable') inner = e.echoDismissed ? note('muted', 'Dismissed', 'Echo recommendation dismissed', '') : stableCard(e, p);
+    var dx = '<div class="field"><label class="lbl" for="dx-' + e.pid + '">Working diagnosis' + (e.dxAuto ? ' · suggested, edit if needed' : '') + '</label><input id="dx-' + e.pid + '" data-act="' + e.pid + ':dx" value="' + (e.diagnosis || '').replace(/"/g, '&quot;') + '" placeholder="Enter a diagnosis"></div>';
+    return card('Assessment and plan', '', '<div class="pad">' + dx + inner + '</div>');
+  }
+
+  function renderPatient(pid) {
+    var p = P[pid], e = enc[pid];
+    var conds = p.conds.map(function (c) { return c.replace('{hub}', S().hub); });
+    var banner = '<section class="card banner"><div><div class="nm">' + p.name + '</div><div class="meta"><span>' + p.age + ' · ' + p.sex + '</span><span>HID <span class="mono">' + p.hid + '</span></span><span>Allergies: ' + p.allergies + '</span></div></div><div class="meta"><span>' + p.where + ' · arrived ' + T(p.arrived) + '</span>' + chip('grey', 'Encounter ' + T(e.now)) + '<a class="btn small" href="#worklist">Back to today’s patients</a></div></section>';
+    var complaint = card('Presenting complaint', '', '<div class="pad">' +
+      '<div class="field"><span class="lbl">Nurse’s triage note, ' + T(p.nurseAt) + '</span><div class="ro">' + p.triage + '</div></div>' +
+      '<div class="row2"><div class="field" style="flex: 2 1 260px"><label class="lbl" for="cc-' + pid + '">Chief complaint</label><input id="cc-' + pid + '" list="cc-list" data-act="' + pid + ':cc" value="' + e.complaint.replace(/"/g, '&quot;') + '" placeholder="Type or choose from the list"></div>' +
+      select('onset-' + pid, pid + ':onset', 'Symptoms started', ONSETS, e.onset) + '</div>' + complaintPrompt(e, p) + '</div>');
+    var vit = card('Vitals', chip('grey', 'Nurse, ' + T(p.nurseAt)), '<div class="pad"><div class="vit"><div><div class="v">' + p.vitals.bp + '</div><div class="l">BP, mmHg</div></div><div><div class="v">' + p.vitals.pulse + '</div><div class="l">Pulse, /min</div></div><div><div class="v">' + p.vitals.spo2 + '%</div><div class="l">Oxygen saturation</div></div><div><div class="v">' + p.vitals.rr + '</div><div class="l">Breaths, /min</div></div><div><div class="v">' + p.vitals.temp + '</div><div class="l">Temperature</div></div></div></div>');
+    var side = card('Record', '', '<div class="pad"><dl class="kv"><dt>Conditions</dt><dd>' + (conds.length ? conds.join('<br>') : 'None on record') + '</dd><dt>Medicines</dt><dd>' + (p.meds.length ? p.meds.map(function (m) { return m.split(',')[0]; }).join('<br>') : 'None') + '</dd><dt>Last visit</dt><dd>' + p.lastVisit + '</dd></dl></div>') +
+      card('Today’s timeline', '', '<div class="pad">' + (e.log.length ? '<ul class="log">' + e.log.map(function (l) { return '<li><span class="t">' + T(l.t) + '</span><span>' + l.text + '</span></li>'; }).join('') + '</ul>' : '<p class="hintline">Nothing recorded yet.</p>') + '</div>');
+    var main = complaint + vit + ordersCard(e, p) + planCard(e, p) + rxCard(e, p) + referralCard(e, p);
+    document.getElementById('v-patient').innerHTML = '<div class="moment">' + TODAY + ' · ' + p.where + ' · Dr M. Rahman, MO</div>' + banner + '<div class="cols"><div class="col-main">' + main + '</div><aside class="col-side">' + side + '</aside></div>';
+  }
+
+  function statusOf(pid) {
+    var e = enc[pid];
+    if (e.referral && e.referral.status === 'acked') return chip('green', 'Referred, acknowledged');
+    if (e.referral && e.referral.status === 'sent') return chip('indigo', 'Referral sent');
+    if (e.opened || e.log.length) return chip('amber', 'In progress');
+    return chip('grey', 'Waiting');
+  }
+  function renderWorklist() {
+    document.getElementById('v-worklist').innerHTML = '<table><thead><tr><th>Patient</th><th>Where</th><th>Arrived</th><th>Triage note</th><th>Status</th><th></th></tr></thead><tbody>' + ORDER.map(function (pid) {
+      var p = P[pid];
+      return '<tr><td><a href="#patient/' + pid + '" style="font-weight: 600; text-decoration: none">' + p.name + '</a><div class="sub">' + p.age + ' ' + p.sex.charAt(0) + ' · <span class="mono">' + p.hid + '</span></div></td><td>' + p.where + '</td><td class="mono">' + T(p.arrived) + '</td><td style="max-width: 360px">' + p.triage + '</td><td>' + statusOf(pid) + '</td><td style="text-align: right"><a class="btn" href="#patient/' + pid + '">Open</a></td></tr>';
+    }).join('') + '</tbody></table>';
+  }
+  function remCount() { return ['shirinEcg', 'jahanaraMissed', 'jahangirReview'].filter(function (k) { return rem[k] === 'open' || rem[k] === 'later'; }).length; }
+  function renderReminders() {
+    var slot = D('2026-10-20', 'W D M'), reslot = D('2026-10-19', 'W D M');
+    var items = [
+      { k: 'shirinEcg', t: 'Shirin Akter is due for her ECG', b: 'New breathlessness on effort at her review on ' + D('2026-09-21', 'D M') + '; ECG not yet done. She is at the NCD corner today. Would you like to order one?', yes: 'Yes, order ECG', done: 'ECG ordered: it is in her orders for today', link: 'shirin' },
+      { k: 'jahanaraMissed', t: 'Jahanara Begum missed her post-stent review yesterday', b: 'Stent on ' + D('2026-07-21', 'D M Y') + ' at the hub. Her 3-month review at the corner was booked for ' + D('2026-10-15', 'W D M') + ' and she did not come. Alert the CHW to visit, and send her an SMS with a new slot?', yes: 'Yes, alert the CHW and send SMS', done: 'CHW R. Sultana has a visit task, in-app and by SMS. SMS sent to Mrs Begum offering ' + reslot + ' 09:00', link: null },
+      { k: 'jahangirReview', t: 'Jahangir Alam is due for his 3-month hub review', b: 'Primary PCI on ' + D('2026-07-15', 'D M Y') + '. The hub review is due this week. Book it?', yes: 'Yes, book the review', done: 'Booked: ' + slot + ' 09:00, first slot. Patient and CHW told by SMS', link: null }
+    ];
+    document.getElementById('v-reminders').innerHTML = items.map(function (it) {
+      var s = rem[it.k], right;
+      if (s === 'done') right = chip('green', it.done);
+      else right = '<div class="actrow">' + btn('rem:' + it.k + ':yes', it.yes, true) + btn('rem:' + it.k + ':later', s === 'later' ? 'Still not now' : 'Not now') + '</div>';
+      return '<div class="rem"><div class="t">' + it.t + (s === 'later' ? ' ' + chip('grey', 'left on the list') : '') + '</div><div style="font-size: 14px; line-height: 21px">' + it.b + (it.link ? ' <a href="#patient/' + it.link + '">Open the encounter</a>.' : '') + '</div>' + right + '</div>';
+    }).join('');
+    var n = remCount();
+    document.getElementById('bell-badge').textContent = n;
+    document.getElementById('nav-badge').textContent = n;
+    document.getElementById('bell-badge').style.display = n ? '' : 'none';
+    document.getElementById('nav-badge').style.display = n ? '' : 'none';
+  }
+  function renderReferrals() {
+    var el = document.getElementById('v-referrals');
+    document.getElementById('ref-count').textContent = referralsSent.length;
+    if (!referralsSent.length) { el.innerHTML = '<p class="hintline">No referrals sent yet today.</p>'; return; }
+    el.innerHTML = referralsSent.map(function (pid) {
+      var r = enc[pid].referral, p = P[pid];
+      return card(p.name + ' · ' + r.service, r.status === 'acked' ? chip('green', 'Acknowledged ' + T(r.ackAt)) : chip('indigo', 'Sent ' + T(r.sentAt) + ' · awaiting acknowledgement'),
+        '<div class="pad"><dl class="kv"><dt>To</dt><dd>' + r.to + '</dd><dt>Urgency</dt><dd>' + r.urgency + '</dd><dt>Reason</dt><dd>' + r.reason + '</dd>' + (r.status === 'acked' ? '<dt>Hub reply</dt><dd>' + r.ackText + '</dd>' : '') + '</dl><div><a class="btn small" href="#patient/' + pid + '">Open the encounter</a></div></div>');
+    }).join('');
+  }
+  function renderNav() {
+    document.getElementById('nav-patients').innerHTML = ORDER.filter(function (pid) { return enc[pid].opened; }).map(function (pid) {
+      return '<a href="#patient/' + pid + '" data-slug="patient/' + pid + '"><span>' + P[pid].name + '</span>' + statusOf(pid) + '</a>';
+    }).join('') || '<div class="small" style="padding: 4px 12px">None yet</div>';
+  }
+
+  // ---------- Routing ----------
+  var curPid = null;
+  function route() {
+    var h = location.hash.replace('#', '') || 'worklist', pid = null;
+    if (h.indexOf('patient/') === 0) { pid = h.slice(8); if (!P[pid]) { pid = null; h = 'worklist'; } }
+    if (!pid && !document.getElementById('s-' + h)) h = 'worklist';
+    curPid = pid;
+    if (pid) { enc[pid].opened = true; }
+    document.querySelectorAll('.screen').forEach(function (s) { s.style.display = s.id === (pid ? 's-patient' : 's-' + h) ? 'flex' : 'none'; });
+    render();
+    window.scrollTo(0, 0);
+  }
+  function render() {
+    renderWorklist(); renderReminders(); renderReferrals(); renderNav();
+    if (curPid) renderPatient(curPid);
+    document.querySelectorAll('.nav a[data-slug]').forEach(function (a) { a.classList.toggle('active', a.getAttribute('data-slug') === (curPid ? 'patient/' + curPid : (location.hash.replace('#', '') || 'worklist'))); });
+    var c = document.getElementById('clock');
+    c.textContent = curPid ? T(enc[curPid].now) : TODAY;
+  }
+
+  // ---------- Actions ----------
+  var A = {
+    cc: function (e, p, arg, val) { e.complaint = val; if (val) log(e, 'Chief complaint: ' + val); evalComplaint(e, p); },
+    onset: function (e, p, arg, val) { e.onset = val; },
+    cpAccept: function (e, p) { e.cp.status = 'accepted'; var due = e.cp.kind === 'chest' ? e.now + 10 : null; addOrder(e, 'ecg', { due: due }); toast('ECG ordered for ' + p.name, due ? 'Due by ' + T(due) + '. It is in the orders below.' : 'It is in the orders below.'); e.cp = null; },
+    cpDismiss: function (e) { e.cp.status = 'dismissed'; e.cp.at = e.now; log(e, 'ECG prompt dismissed'); },
+    cpReason: function (e, p, arg, val) { e.cp.reason = val; },
+    addOrder: function (e, p, arg, val) { if (!val) return; if (val === 'ecg' && hasEcg(e)) { toast('ECG already ordered'); return; } addOrder(e, val); if (e.cp && e.cp.status === 'open' && val === 'ecg') e.cp = null; tick(e, 1); },
+    upload: function (e, p, arg) {
+      var o = e.orders.filter(function (x) { return x.id === +arg; })[0]; if (!o) return;
+      tick(e, 5); o.status = 'done'; o.doneAt = e.now;
+      e.ecg = { at: e.now, agreed: false, sentAt: null, confirmedAt: null, disagree: '' };
+      log(e, 'ECG uploaded and read by the AI: ' + (p.pattern === 'ste' ? 'ST elevation V1–V4' : p.pattern === 'nste' ? 'no ST elevation; ST depression V4–V6' : 'non-specific ST/T changes'));
+      if (p.pattern === 'ste') { e.diagnosis = 'Suspected acute anterior STEMI (AI read)'; e.dxAuto = true; toast('AI read: ST elevation in V1–V4', 'Suggestive of anterior STEMI. The STEMI pathway is open in Assessment and plan.'); }
+      else if (p.pattern === 'nste') { e.diagnosis = 'Possible NSTE-ACS (no ST elevation; symptoms)'; e.dxAuto = true; toast('AI read: no ST elevation', 'ST depression V4–V6. Troponin prompt is open in Assessment and plan.'); }
+      else { e.diagnosis = 'Non-specific ECG changes with exertional symptoms'; e.dxAuto = true; toast('AI read: non-specific ST/T changes', 'No acute pattern. Echo prompt is open in Assessment and plan.'); }
+    },
+    aiAgree: function (e) { e.ecg.agreed = true; e.ecg.agreedAt = e.now; log(e, 'MO agreed with the AI read'); },
+    aiSend: function (e, p) {
+      tick(e, 1); e.ecg.sentAt = e.now; log(e, 'ECG sent to ' + S().cardio + ' (' + S().hubShort + ') for confirmatory interpretation');
+      var sentAt = e.now;
+      later(5000, function () {
+        if (e.ecg.confirmedAt) return;
+        e.ecg.confirmedAt = sentAt + 5; e.now = Math.max(e.now, e.ecg.confirmedAt);
+        log(e, 'Cardiologist reply: ' + p.cardio.split('.')[0], e.ecg.confirmedAt);
+        if (p.pattern === 'ste') { e.diagnosis = 'Acute anterior STEMI, confirmed by cardiologist ' + T(e.ecg.confirmedAt); e.dxAuto = true; }
+        toast('Reply from ' + S().cardio + ', ' + S().hubShort, p.cardio);
+        render();
+      });
+    },
+    aiDisagree: function (e, p, arg, val) { if (!val) return; e.ecg.disagree = val; log(e, 'MO reading differs from the AI: ' + val); },
+    given: function (e, p, arg, val) { e.given[arg] = val ? e.now : null; if (val) log(e, GIVEN.filter(function (g) { return g[0] === arg; })[0][1].split(',')[0] + ' given'); if (e.referral && e.referral.status === 'draft') makeReferral(e, p, e.referral.kind); },
+    lysisCI: function (e, p, arg, val) { e.lysisCI[arg] = val; },
+    lysis: function (e, p) { tick(e, 4); e.lysisAt = e.now; log(e, 'Fibrinolysis given'); toast('Fibrinolysis recorded ' + T(e.now), 'ST check due between ' + T(e.now + 60) + ' and ' + T(e.now + 90) + '.'); },
+    recAccept: function (e, p, arg) { tick(e, 2); makeReferral(e, p, arg); toast('Referral drafted', 'Reason for referral filled from the record. Check it, confirm consent, and send.'); },
+    recDecline: function (e) { e.rec.status = 'declined'; log(e, 'Referral recommendation declined'); },
+    recReason: function (e, p, arg, val) { e.rec.reason = val; },
+    recReopen: function (e) { e.rec.status = ''; },
+    vh: function (e, p, arg, val) { e.vh[arg] = val; if (val) log(e, 'Very high risk feature: ' + VH.filter(function (v) { return v[0] === arg; })[0][1].toLowerCase()); },
+    tropOrder: function (e, p) { tick(e, 1); addOrder(e, 'trop'); toast('Bedside troponin ordered', 'Enter the result from the reader when it is back, about 15 minutes.'); },
+    tropDismiss: function (e) { e.tropDismissed = true; log(e, 'Troponin prompt dismissed'); },
+    tropResult: function (e, p, arg, val) {
+      if (!val) return;
+      var o = e.orders.filter(function (x) { return x.id === +arg; })[0]; if (!o) return;
+      if (o.type === 'trop') tick(e, 15); else e.now = Math.max(e.now, o.due);
+      o.status = 'done'; o.doneAt = e.now; o.result = val;
+      log(e, o.label + ': ' + val);
+      if (val === 'raised') { e.diagnosis = 'NSTEMI (raised troponin, no ST elevation)'; e.dxAuto = true; toast('Troponin raised', 'NSTEMI: the referral prompt is open in Assessment and plan.'); }
+      else if (o.type === 'trop') { addOrder(e, 'trop2', { due: e.now + 180, by: 'Auto-ordered: repeat at 3 hours' }); toast('First troponin normal', 'Repeat ordered for ' + T(e.now + 180) + ', 3 hours after the first.'); }
+      else { e.diagnosis = 'Chest or abdominal pain; heart attack unlikely (two normal troponins)'; e.dxAuto = true; }
+    },
+    bookReview: function (e) { e.rec.booked = D('2026-10-22', 'W D M'); log(e, 'NCD corner review booked for ' + e.rec.booked); toast('Review booked', e.rec.booked + ', NCD corner. Patient told by SMS; CHW notified.'); },
+    bookReview4: function (e) { e.rec.booked = D('2026-11-13', 'W D M'); log(e, 'Review booked for ' + e.rec.booked); toast('Review booked', e.rec.booked + ', NCD corner. Patient told by SMS.'); },
+    echoOrder: function (e) { tick(e, 1); addOrder(e, 'echo'); toast('Echo ordered', 'Handheld echo at the corner. Enter the result when it is done.'); },
+    echoDismiss: function (e) { e.echoDismissed = true; log(e, 'Echo prompt dismissed'); },
+    echoEf: function (e, p, arg, val) { e.echo.ef = val; },
+    echoWm: function (e, p, arg, val) { e.echo.wm = val; },
+    echoSave: function (e, p, arg) { var o = e.orders.filter(function (x) { return x.id === +arg; })[0]; if (!o) return; tick(e, 20); o.status = 'done'; o.doneAt = e.now; o.result = 'EF ' + e.echo.ef + '%'; log(e, 'Echo: EF ' + e.echo.ef + '%, ' + e.echo.wm); e.diagnosis = 'Suspected stable coronary disease' + (+e.echo.ef < 40 ? ' with reduced EF (' + e.echo.ef + '%)' : ''); e.dxAuto = true; toast('Echo saved', 'The medical management and angiography prompt is open in Assessment and plan.'); },
+    restPain: function (e, p, arg) { e.restPain = arg; },
+    lowEffort: function (e, p, arg) { e.lowEffort = arg; },
+    prescribeMM: function (e) { tick(e, 2); e.rxNew = MM.slice(); e.rxNewAt = e.now; log(e, 'Medical management prescribed: aspirin, atorvastatin, bisoprolol, GTN spray'); toast('Four medicines added to the prescription', 'Aspirin, atorvastatin, bisoprolol and GTN spray. Review in 4 weeks.'); if (e.referral && e.referral.status === 'draft') makeReferral(e, P[e.pid], e.referral.kind); },
+    dx: function (e, p, arg, val) { e.diagnosis = val; e.dxAuto = false; },
+    centre: function (e, p, arg) { e.centre = arg; if (e.referral && e.referral.status === 'draft') makeReferral(e, p, e.referral.kind); },
+    refTo: function (e, p, arg, val) { e.centre = val; makeReferral(e, p, e.referral.kind); },
+    refReason: function (e, p, arg, val) { e.referral.reason = val; },
+    refTransport: function (e, p, arg, val) { e.referral.transport = val; },
+    refConsent: function (e, p, arg, val) { e.referral.consent = val; },
+    refSend: function (e, p) {
+      var r = e.referral; tick(e, 2); r.status = 'sent'; r.sentAt = e.now; referralsSent.push(e.pid);
+      log(e, 'Referral sent to ' + r.to + (r.urgency === 'Emergency' ? ' with pre-alert' : ''));
+      toast('Referral sent ' + T(r.sentAt), r.urgency === 'Emergency' ? 'The hub has 15 minutes to acknowledge.' : 'The hub has 24 hours to acknowledge.');
+      var sentAt = r.sentAt;
+      later(5000, function () {
+        if (r.status !== 'sent') return;
+        r.status = 'acked'; r.ackAt = sentAt + (r.urgency === 'Emergency' ? 4 : 35); e.now = Math.max(e.now, r.ackAt);
+        var dest = centres().filter(function (c) { return c.key === r.toKey; })[0] || centres()[0];
+        r.ackText = (ACK[r.kind] || ACK.nstemi).replace('{coord}', r.toKey === 'hub' ? S().coord : 'A. Rahman').replace('{hub}', r.toKey === 'hub' ? S().hubShort : 'NICVD').replace('{slot}', D(dest.slot, 'W D M'));
+        log(e, 'Hub acknowledged the referral', r.ackAt);
+        toast('Hub acknowledged ' + T(r.ackAt), r.ackText);
+        render();
+      });
+    },
+    rxStop: function (e, p, arg) { var i = +arg, m = e.rx[i]; if (!m) return; e.stopped.push(m.split(',')[0]); e.rx.splice(i, 1); log(e, m.split(',')[0] + ' stopped'); },
+    rxAdd: function (e, p, arg, val) { if (!val) return; var label = rxLabel(val); e.rxNew.push(label); log(e, label.split(',')[0] + ' added'); }
+  };
+  var REM = {
+    shirinEcg: { yes: function () { rem.shirinEcg = 'done'; var e = enc.shirin; addOrder(e, 'ecg', { by: 'Reminder, confirmed by Dr M. Rahman' }); toast('ECG ordered for Shirin Akter', 'It is in her orders for today.'); } },
+    jahanaraMissed: { yes: function () { rem.jahanaraMissed = 'done'; toast('CHW alerted for Jahanara Begum', 'Visit task sent to R. Sultana, in-app and by SMS. SMS sent to the patient offering ' + D('2026-10-19', 'W D M') + ' 09:00.'); } },
+    jahangirReview: { yes: function () { rem.jahangirReview = 'done'; toast('Hub review booked for Jahangir Alam', D('2026-10-20', 'W D M') + ' 09:00. Patient and CHW told by SMS.'); } }
+  };
+
+  function run(act, val) {
+    var parts = act.split(':'), head = parts[0];
+    if (head === 'rem') { var k = parts[1], what = parts[2]; if (what === 'yes') REM[k].yes(); else rem[k] = 'later'; render(); return; }
+    var pid = head, a = parts[1], arg = parts.slice(2).join(':');
+    if (!enc[pid] || !A[a]) return;
+    A[a](enc[pid], P[pid], arg, val);
+    render();
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-act]');
+    if (!el || el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.disabled) return;
+    run(el.getAttribute('data-act'));
+  });
+  document.addEventListener('change', function (e) {
+    var el = e.target.closest('[data-act]');
+    if (!el || (el.tagName !== 'SELECT' && el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA')) return;
+    run(el.getAttribute('data-act'), el.type === 'checkbox' ? el.checked : el.value);
+  });
+  if (sel) sel.addEventListener('change', function () {
+    cur = sel.value; applySite();
+    try { var u = new URL(location.href); u.searchParams.set('site', cur); history.replaceState(null, '', u); } catch (err) {}
+    render();
+  });
+  window.addEventListener('hashchange', route);
+  applySite();
+  route();
+})();
+</script>
+</body>
+</html>
