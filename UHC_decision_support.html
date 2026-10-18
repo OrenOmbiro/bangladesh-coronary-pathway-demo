@@ -751,7 +751,7 @@ textarea{min-height:120px;line-height:21px;resize:vertical}
     }).join('');
     var msgs = e.sms.length ? '<div class="field" style="margin-top: 6px"><span class="lbl">Messages to the patient and family</span><ul class="log">' + e.sms.map(function (m) { return '<li><span class="t">' + m.t + '</span><span>' + m.text + '</span></li>'; }).join('') + '</ul></div>' : '';
     var tasks = e.chwTasks.length ? '<div class="field" style="margin-top: 6px"><span class="lbl">CHW tasks</span><ul class="facts">' + e.chwTasks.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div>' : '';
-    return card('Care coordination · Sygnal', '', '<div class="pad" style="gap: 10px"><p class="hintline" style="margin: 0 0 4px">Each step has a clock. A missed step alerts the person responsible, then their supervisor.</p><ul class="journey">' + list + '</ul>' + msgs + tasks + '</div>');
+    return card('Time-sensitive steps · Sygnal', '', '<div class="pad" style="gap: 10px"><p class="hintline" style="margin: 0 0 4px">Each step has a clock. A missed step alerts the person responsible, then their supervisor.</p><ul class="journey">' + list + '</ul>' + msgs + tasks + '</div>');
   }
   function planCardHub(e, p) {
     var pl = e.hub.plan; if (!pl) return '';
